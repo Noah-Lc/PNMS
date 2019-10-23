@@ -10,9 +10,11 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace PNMS.Web.API.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]  //JUST FOR TESTING
     public class AuthentificationController : ApiController
     {
         EntitiesContainer db = new EntitiesContainer(); //Database context
