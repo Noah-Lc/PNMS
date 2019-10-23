@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PNMS.Web.API", "PNMS.Web.API\PNMS.Web.API.csproj", "{924E867B-EDDA-4DED-A457-9F7A36742559}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{924E867B-EDDA-4DED-A457-9F7A36742559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{924E867B-EDDA-4DED-A457-9F7A36742559}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{924E867B-EDDA-4DED-A457-9F7A36742559}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{924E867B-EDDA-4DED-A457-9F7A36742559}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {64EF47E8-4E3A-4B3C-B4FD-AC6D6C5FADF2}
+	EndGlobalSection
+EndGlobal
