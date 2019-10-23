@@ -14,6 +14,7 @@ using System.Web.Http.Cors;
 
 namespace PNMS.Web.API.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class AuthentificationController : ApiController
     {
         EntitiesContainer db = new EntitiesContainer(); //Database context
