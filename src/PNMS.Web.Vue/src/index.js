@@ -5,9 +5,9 @@ import { router } from './Routes';
 import App from './App';
 
 // setup fake backend
-import { configureFakeBackend } from './Helpers';
+/*import { configureFakeBackend } from './Helpers';
 configureFakeBackend();
-
+*/
 import './../public/src/css/style.css'
 
 new Vue({

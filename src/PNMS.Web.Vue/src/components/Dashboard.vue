@@ -149,7 +149,11 @@
                             </div>
                         </div>
                     </div>
-
+<ul v-if="categories">
+            <li v-for="category in categories" :key="category.id">
+                {{category.name + ' ' + category.image}}
+            </li>
+        </ul>
                     <div class="modal" id="confirmationDelete" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -248,12 +252,12 @@ export default {
         user () {
             return this.$store.state.authentication.user;
         },
-        users () {
-            return this.$store.state.users.all;
+        categories () {
+            return this.$store.state.categories.all;
         }
     },
     created () {
-        this.$store.dispatch('users/getAll');
+        this.$store.dispatch('categories/getAll');
     }
 }
 </script>

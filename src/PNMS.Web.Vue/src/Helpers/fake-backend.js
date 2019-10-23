@@ -1,5 +1,6 @@
 export function configureFakeBackend() {
     let users = [{ id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User' }];
+    let categories = [{ id: 1, name: 'test01', image: 'test01' }, { id: 2, name: 'test02', image: 'test02' }, { id: 2, name: 'test03', image: 'test03' }];
     let realFetch = window.fetch;
     window.fetch = function (url, opts) {
         return new Promise((resolve, reject) => {
@@ -45,6 +46,19 @@ export function configureFakeBackend() {
                         reject('Unauthorised');
                     }
 
+                    return;
+                }
+
+                // authenticate
+                if (url.endsWith('/api/categories') && opts.method === 'GET') {
+
+                    if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
+                        console.log(JSON.stringify(categories));
+                        resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(categories)) });
+                    } else {
+                        // return 401 not authorised if token is null or invalid
+                        reject('Unauthorised');
+                    }
                     return;
                 }
 

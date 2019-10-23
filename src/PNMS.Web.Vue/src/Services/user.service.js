@@ -7,17 +7,30 @@ export const userService = {
 };
 
 function login(username, password) {
+    var details = {
+        'username': username,
+        'password': password
+    };
+    
+    var formBody = [];
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: formBody
     };
 
     return fetch(`${config.apiUrl}/api/authentification`, requestOptions)
         .then(handleResponse)
         .then(user => {
+            console.log(user.access_token);
             // login successful if there's a jwt token in the response
-            if (user.token) {
+            if (user.access_token) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user));
             }
