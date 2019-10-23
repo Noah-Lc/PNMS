@@ -15,7 +15,7 @@
                             <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
                                 <!-- Log out-->
                                 <li class="nav-item">
-                                    <a href="login.html" class="nav-link logout"> <span class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out"></i></a>
+                                    <a href="/login" class="nav-link logout"> <span class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -243,9 +243,19 @@
 </template>
 
 <script>
-    export default {
-        components: {}
+export default {
+    computed: {
+        user () {
+            return this.$store.state.authentication.user;
+        },
+        users () {
+            return this.$store.state.users.all;
+        }
+    },
+    created () {
+        this.$store.dispatch('users/getAll');
     }
+}
 </script>
 
 <style>
