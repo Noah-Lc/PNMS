@@ -19,6 +19,7 @@ namespace PNMS.Web.API.Controllers
     {
         EntitiesContainer db = new EntitiesContainer(); //Database context
 
+        [HttpOptions]
         public async Task<HttpResponseMessage> POST(FormDataCollection formData)
         {
             string username = formData["username"];
