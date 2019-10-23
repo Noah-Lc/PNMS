@@ -70,6 +70,12 @@ namespace PNMS.Web.API.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, "User added succesfully");
         }
 
+        // GET: api/user
+        public IEnumerable<User> Get()
+        {
+            return db.Users.ToList();
+        }
+
         [HttpGet]
         public HttpResponseMessage Get(int id)
         {

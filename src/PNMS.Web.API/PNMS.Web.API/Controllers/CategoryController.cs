@@ -119,25 +119,83 @@ namespace PNMS.Web.API.Controllers
 
         // PUT: api/Category/5
         [HttpPut]
-        public HttpResponseMessage Put(NewsCategory Category)
+        public HttpResponseMessage Put()
         {
-            if(Category == null)
+            int id = int.Parse(HttpContext.Current.Request.Params["id"]);
+            string name = HttpContext.Current.Request.Params["name"];
+            if (id < 0)
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your id!!!!");
+            NewsCategory Category = db.NewsCategories.Where(x => x.Id == id).FirstOrDefault();
+            if (Category == null)
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Please check your data, no category was found!");
-            NewsCategory newsCategory = db.NewsCategories.Where(x => x.Id == Category.Id).FirstOrDefault();
-            if(newsCategory == null)
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Please check your data, no category was found!");
+            Dictionary<string, object> dict = new Dictionary<string, object>();
             try
             {
-                db.NewsCategories.Remove(newsCategory);
-                db.NewsCategories.Add(Category);
-                db.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.OK, $"{Category.Name} updated succusfully!");
+                var httpRequest = HttpContext.Current.Request;
+
+                foreach (string file in httpRequest.Files)
+                {
+                    HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+
+                    var postedFile = httpRequest.Files[file];
+                    if (postedFile != null && postedFile.ContentLength > 0)
+                    {
+
+                        int MaxContentLength = 1024 * 1024 * 25;
+
+                        IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".jpeg" };
+                        var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
+                        var extension = ext.ToLower();
+                        if (!AllowedFileExtensions.Contains(extension))
+                        {
+
+                            var message = string.Format("Please Upload image of type .jpg,.gif,.png,.jpeg.");
+
+                            dict.Add("error", message);
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, dict);
+                        }
+                        else if (postedFile.ContentLength > MaxContentLength)
+                        {
+
+                            var message = string.Format($"Please Upload a file with max size {MaxContentLength}.");
+
+                            dict.Add("error", message);
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, dict);
+                        }
+                        else
+                        {
+                            var filePath = HttpContext.Current.Server.MapPath("~/Uploads/Categories/" + postedFile.FileName);
+                            postedFile.SaveAs(filePath);
+
+                            try
+                            {
+                                Category.Image = postedFile.FileName;
+                                Category.Name = name.ToLower();
+                                db.SaveChanges();
+                            }
+                            catch
+                            {
+                                var msg = string.Format("Somehting Went wrong!");
+                                dict.Add("error", msg);
+                                return Request.CreateResponse(HttpStatusCode.InternalServerError, dict);
+                            }
+
+                        }
+                    }
+
+                    var message1 = string.Format("Category updated succefully!");
+                    return Request.CreateErrorResponse(HttpStatusCode.Created, message1); ;
+                }
+                var res = string.Format("Please Upload a image.");
+                dict.Add("error", res);
+                return Request.CreateResponse(HttpStatusCode.NotFound, dict);
             }
             catch (Exception ex)
             {
-
+                var res = string.Format("Somehting Went wrong!");
+                dict.Add("error", res);
+                return Request.CreateResponse(HttpStatusCode.NotFound, dict);
             }
-            return Request.CreateResponse(HttpStatusCode.InternalServerError, "");
         }
 
         // DELETE: api/Category/5
