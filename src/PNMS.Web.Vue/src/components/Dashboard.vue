@@ -46,7 +46,9 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-striped">
+                                        <em v-if="items.loading">Loading items...</em>
+                                        <span v-if="items.error" class="text-danger">ERROR: {{items.error}}</span>
+                                        <table class="table table-striped" v-if="items.items">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
@@ -58,37 +60,15 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <th scope="row">1</th>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                    <td>@mdo</td>
+                                                <tr v-for="item in items.items" :key="item.id">
+                                                    <th scope="row">{{ item.id }}</th>
+                                                    <td>{{ item.name }}</td>
+                                                    <td>{{ item.text }}</td>
+                                                    <td>{{ item.date }}</td>
+                                                    <td><a href="#">{{ item.link }}</a></td>
                                                     <td>
-                                                        <button class="mr-3 btn btn-danger" data-toggle="modal" data-target="#confirmationDelete"></button>
-                                                        <button class="btn btn-info"></button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">2</th>
-                                                    <td>Jacob</td>
-                                                    <td>Thornton</td>
-                                                    <td>@fat</td>
-                                                    <td>@fat</td>
-                                                    <td>
-                                                        <button class="mr-3 btn btn-danger"></button>
-                                                        <button class="btn btn-info"></button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">3</th>
-                                                    <td>Larry</td>
-                                                    <td>the Bird</td>
-                                                    <td>@twitter</td>
-                                                    <td>@twitter</td>
-                                                    <td>
-                                                        <button class="mr-3 btn btn-danger"></button>
-                                                        <button class="btn btn-info"></button>
+                                                        <button class="mr-3 btn btn-danger" v-on:click="editItem(item.id)" data-toggle="modal" data-target="#confirmationDelete"></button>
+                                                        <button class="btn btn-info" v-on:click="deleteItem(item.id)" data-toggle="modal" data-target="#createCategory"></button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -105,7 +85,9 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-striped">
+                                        <em v-if="categories.loading">Loading categories...</em>
+                                        <span v-if="categories.error" class="text-danger">ERROR: {{categories.error}}</span>
+                                        <table class="table table-striped" v-if="categories.items">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
@@ -115,31 +97,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <th scope="row">1</th>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
+                                                <tr v-for="category in categories.items" :key="category.id">
+                                                    <th scope="row">{{ category.id }}</th>
+                                                    <td>{{ category.name }}</td>
+                                                    <td>{{ category.image }}</td>
                                                     <td>
-                                                        <button class="mr-3 btn btn-danger"></button>
-                                                        <button class="btn btn-info"></button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">2</th>
-                                                    <td>Jacob</td>
-                                                    <td>Thornton</td>
-                                                    <td>
-                                                        <button class="mr-3 btn btn-danger"></button>
-                                                        <button class="btn btn-info"></button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">3</th>
-                                                    <td>Larry</td>
-                                                    <td>the Bird</td>
-                                                    <td>
-                                                        <button class="mr-3 btn btn-danger"></button>
-                                                        <button class="btn btn-info"></button>
+                                                        <button class="mr-3 btn btn-danger" v-on:click="editCategory(item.id)" data-toggle="modal" data-target="#confirmationCategory"></button>
+                                                        <button class="btn btn-info"  v-on:click="deleteCategory(item.id)" data-toggle="modal" data-target="#createCategory"></button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -149,11 +113,6 @@
                             </div>
                         </div>
                     </div>
-<ul v-if="categories">
-            <li v-for="category in categories" :key="category.id">
-                {{category.name + ' ' + category.image}}
-            </li>
-        </ul>
                     <div class="modal" id="confirmationDelete" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -173,7 +132,25 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class="modal" id="confirmationCategory" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Delet</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete this category?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="modal" id="createCategory" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -188,20 +165,24 @@
                                     <form>
                                         <div class="form-group">
                                             <label>Name</label>
-                                            <input type="text" placeholder="Name Category" class="form-control">
+                                            <input type="text" v-model="item.name" placeholder="Name Category" class="form-control" :class="{ 'is-invalid': item.submitted && !item.name }">
                                         </div>
                                         <div class="form-group">
                                             <label>Text</label>
-                                            <input type="text" placeholder="Text" class="form-control">
+                                            <input type="text" v-model="item.text" placeholder="Text" class="form-control" :class="{ 'is-invalid': item.submitted && !item.text }">
                                         </div>
                                         <div class="form-group">
                                             <label>Date</label>
-                                            <input type="date" placeholder="Date" class="form-control">
+                                            <input type="date" v-model="item.date" placeholder="Date" class="form-control" :class="{ 'is-invalid': item.submitted && !item.date }">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Link</label>
+                                            <input type="text" v-model="item.link" placeholder="Date" class="form-control" :class="{ 'is-invalid': item.submitted && !item.link }">
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">Create</button>
+                                    <button type="button" class="btn btn-primary" v-on:click="createItem()">Create</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
@@ -248,16 +229,86 @@
 
 <script>
 export default {
+    data () {
+        return {
+            item :{
+                name: '',
+                text: '',
+                date: '',
+                link: '',
+                submitted: false
+            },
+            category :{
+                name: '',
+                image: '',
+                submitted: false
+            }
+        }
+    },
     computed: {
         user () {
             return this.$store.state.authentication.user;
         },
         categories () {
             return this.$store.state.categories.all;
+        },
+        items () {
+            return this.$store.state.items.all;
+        }
+    },
+    // define methods under the `methods` object
+    methods: {
+        editItem: function (id) {
+            // `id` is the id of Item
+            if (id) {
+                
+            }
+        },
+        deleteItem: function (id) {
+            // `id` is the id of Item
+            if (id) {
+                
+            }
+        },
+        editCategory: function (id) {
+            // `id` is the id of Item
+            if (id) {
+                
+            }
+        },
+        deleteCategory: function (id) {
+            // `id` is the id of Item
+            if (id) {
+                
+            }
+        },
+        createItem(){
+            this.item.submitted = true;
+            const { name, text, date, link } = this.item;
+            const { dispatch } = this.$store;
+            console.log(name, text, date, link);
+            if (name && text && date && link) {
+                dispatch('items/create', { name, text, date, link });
+                this.$store.dispatch('items/getAll');
+                $('#createCategory').modal('toggle');
+                this.item = {name: '', text: '', date: '', link: '', submitted: false}
+            }
+        },
+        createCategory(){
+            this.item.submitted = true;
+            const { name, text, date, link } = this;
+            const { dispatch } = this.$store;
+            console.log(name, text, date, link);
+            if (name && text && date && link) {
+                dispatch('items/create', { name, text, date, link });
+                this.$store.dispatch('items/getAll');
+                $('#createCategory').modal('toggle');
+            }
         }
     },
     created () {
         this.$store.dispatch('categories/getAll');
+        this.$store.dispatch('items/getAll');
     }
 }
 </script>

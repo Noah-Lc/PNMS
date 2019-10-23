@@ -1,22 +1,29 @@
 import config from 'config';
 import { authHeader } from '../Helpers';
 
-export const categoryService = {
+export const itemService = {
     create,
     getAll,
     getByID
 };
 
-function create(name, image) {
+function create(name, text, date, link) {
+    let data = new FormData();
+
+    data.append('name', name)
+    data.append('text', text)
+    data.append('date', date)
+    data.append('link', link)
+
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'multipart/form-data' },
-        body: JSON.stringify({ name, image })
+        headers: authHeader({ 'Content-Type': 'multipart/form-data' }),
+        body: data
     };
 
-    return fetch(`${config.apiUrl}/api/Category`, requestOptions)
-        .then(user => {
-            return user;
+    return fetch(`${config.apiUrl}/api/News`, requestOptions)
+        .then(item => {
+            return item;
     });
 }
 
@@ -27,7 +34,7 @@ function getAll() {
         headers: authHeader({ 'Content-Type': 'application/json' })
     };
 
-    return fetch(`${config.apiUrl}/api/Category`, requestOptions).then(handleResponse);
+    return fetch(`${config.apiUrl}/api/News`, requestOptions).then(handleResponse);
 }
 
 function getByID(id) {
@@ -36,7 +43,7 @@ function getByID(id) {
         headers: authHeader({ 'Content-Type': 'application/json' })
     };
 
-    return fetch(`${config.apiUrl}/api/Category/${id}`, requestOptions);
+    return fetch(`${config.apiUrl}/api/News/${id}`, requestOptions);
 }
 
 function handleResponse(response) {

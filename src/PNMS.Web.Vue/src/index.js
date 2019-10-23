@@ -6,8 +6,8 @@ import App from './App';
 
 // setup fake backend
 /*import { configureFakeBackend } from './Helpers';
-configureFakeBackend();
-*/
+configureFakeBackend();*/
+
 import './../public/src/css/style.css'
 
 new Vue({

@@ -8,7 +8,6 @@ export const categories = {
     actions: {
         getAll({ commit }) {
             commit('getAllRequest');
-
             categoryService.getAll()
                 .then(
                     categories => commit('getAllSuccess', categories),
@@ -20,8 +19,8 @@ export const categories = {
         getAllRequest(state) {
             state.all = { loading: true };
         },
-        getAllSuccess(state, users) {
-            state.all = { items: users };
+        getAllSuccess(state, categories) {
+            state.all = { items: categories };
         },
         getAllFailure(state, error) {
             state.all = { error };

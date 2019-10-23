@@ -1,6 +1,11 @@
 export function configureFakeBackend() {
-    let users = [{ id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User' }];
-    let categories = [{ id: 1, name: 'test01', image: 'test01' }, { id: 2, name: 'test02', image: 'test02' }, { id: 2, name: 'test03', image: 'test03' }];
+    let users = [{ id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User' }, { id: 2, username: 'admin', password: 'admin', firstName: 'admin', lastName: 'admin' }];
+    let categories = [{ id: 1, name: 'test01', image: 'test01' }, { id: 2, name: 'test02', image: 'test02' }, { id: 3, name: 'test03', image: 'test03' }];
+    let items = [
+        { id: 1, name: 'test01', text: 'test01', date:'2013-10-21', link: '\\test01' }, 
+        { id: 2, name: 'test02', text: 'test02', date:'2013-12-15', link: '\\test02' }, 
+        { id: 3, name: 'test03', text: 'test03', date:'2014-05-06', link: '\\test03' }];
+
     let realFetch = window.fetch;
     window.fetch = function (url, opts) {
         return new Promise((resolve, reject) => {
@@ -36,25 +41,65 @@ export function configureFakeBackend() {
                     return;
                 }
 
-                // get users
-                if (url.endsWith('/users') && opts.method === 'GET') {
-                    // check for fake auth token in header and return users if valid, this security is implemented server side in a real application
-                    if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
-                        resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(users)) });
+                // Create new item
+                if (url.endsWith('/api/items') && opts.method === 'POST') {
+                    // get parameters from post request
+                    let params = JSON.parse(opts.body);
+
+
+                    if (params.id) {
+                        items = items.filter(item => params.id != item.id);
+
+                        resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(items)) });
                     } else {
-                        // return 401 not authorised if token is null or invalid
-                        reject('Unauthorised');
+                        // else return error
+                        reject('Username or password is incorrect');
                     }
 
                     return;
                 }
 
-                // authenticate
+                // delete item
+                if (url.endsWith('/api/items') && opts.method === 'DELETE') {
+                    // get parameters from post request
+                    let params = JSON.parse(opts.body);
+
+                    if (params) {
+                        // if params are valid return a fake item details
+                        let responseJson = {
+                            id: 4,
+                            name: params.name,
+                            text: params.text,
+                            date: params.date,
+                            link: '\\' + params.link
+                        };
+                        items.push(responseJson);
+                        resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(responseJson)) });
+                    } else {
+                        // else return error
+                        reject('Username or password is incorrect');
+                    }
+
+                    return;
+                }
+
+                // get categories
                 if (url.endsWith('/api/categories') && opts.method === 'GET') {
 
                     if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
-                        console.log(JSON.stringify(categories));
                         resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(categories)) });
+                    } else {
+                        // return 401 not authorised if token is null or invalid
+                        reject('Unauthorised');
+                    }
+                    return;
+                }
+
+                // get items
+                if (url.endsWith('/api/items') && opts.method === 'GET') {
+
+                    if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
+                        resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(items)) });
                     } else {
                         // return 401 not authorised if token is null or invalid
                         reject('Unauthorised');
