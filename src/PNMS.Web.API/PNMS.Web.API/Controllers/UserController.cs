@@ -11,7 +11,7 @@ using System.Web.Http.Cors;
 
 namespace PNMS.Web.API.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")] //JUST FOR TESTING
+    [Authorize]
     public class UserController : ApiController
     {
         EntitiesContainer db = new EntitiesContainer(); //Database context
@@ -25,7 +25,7 @@ namespace PNMS.Web.API.Controllers
         /// <param name="lastname"></param>
         /// <param name="email"></param>
         /// <returns></returns>
-        [HttpOptions]
+        [HttpPost]
         public HttpResponseMessage POST(FormDataCollection formData)
         {
             string username = formData["username"];
@@ -70,11 +70,18 @@ namespace PNMS.Web.API.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, "User added succesfully");
         }
 
+        [HttpGet]
         public HttpResponseMessage Get(int id)
         {
-            //if(id < 0)
+            if (id < 0)
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your id!!!!");
 
-            return Request.CreateResponse(HttpStatusCode.OK, "User added succesfully");
+            User user = db.Users.Where(x => x.Id == id).FirstOrDefault();
+            if (user == null)
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your data, no user was found!");
+
+
+            return Request.CreateResponse(HttpStatusCode.OK, user);
         }
     }
 }

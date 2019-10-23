@@ -14,12 +14,11 @@ using System.Web.Http.Cors;
 
 namespace PNMS.Web.API.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]  //JUST FOR TESTING
     public class AuthentificationController : ApiController
     {
         EntitiesContainer db = new EntitiesContainer(); //Database context
 
-        [HttpOptions]
+        [HttpPost]
         public async Task<HttpResponseMessage> POST(FormDataCollection formData)
         {
             string username = formData["username"];
