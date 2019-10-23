@@ -2,13 +2,13 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 10/23/2019 16:56:02
--- Generated from EDMX file: C:\Users\DATAFLEX-02\Desktop\PNMS\src\PNMS.Web.API\DataLayer\Entities.edmx
+-- Date Created: 10/24/2019 00:46:47
+-- Generated from EDMX file: C:\Users\hp\Desktop\PNMS\src\PNMS.Web.API\DataLayer\Entities.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
 GO
-
+GO
 IF SCHEMA_ID(N'dbo') IS NULL EXECUTE(N'CREATE SCHEMA [dbo]');
 GO
 
@@ -52,7 +52,7 @@ CREATE TABLE [dbo].[NewsItems] (
     [Name] nvarchar(max)  NOT NULL,
     [Text] nvarchar(max)  NULL,
     [Date] datetime  NULL,
-    [ImageUrl] nvarchar(max)  NULL,
+    [LinkUrl] nvarchar(max)  NULL,
     [NewsCategoryId] int  NOT NULL
 );
 GO

@@ -1,4 +1,5 @@
 ﻿using DataLayer;
+using PNMS.Web.API.Canvas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,19 @@ namespace PNMS.Web.API.Controllers
         EntitiesContainer db = new EntitiesContainer(); //Database context
 
         // GET: api/Category
-        public IEnumerable<NewsCategory> Get()
+        public IEnumerable<Category> Get()
         {
-            return db.NewsCategories.ToList();
+            List<Category> categories = new List<Category>();
+            foreach(NewsCategory ctg in db.NewsCategories.ToList())
+            {
+                categories.Add(new Category()
+                {
+                    Id = ctg.Id,
+                    ImageUrl = $"Uploads/Categories/{ctg.Image}",
+                    Name = ctg.Name
+                });
+            }
+            return categories;
         }
 
         // GET: api/Category/5
@@ -34,8 +45,7 @@ namespace PNMS.Web.API.Controllers
             if(ctg == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your data, no category was found!");
 
-
-            return Request.CreateResponse(HttpStatusCode.OK, ctg);
+            return Request.CreateResponse(HttpStatusCode.OK, new Category() {Name = ctg.Name, ImageUrl = $"Uploads/Categories/{ctg.Image}", Id = ctg.Id });
         }
 
         // POST: api/Category

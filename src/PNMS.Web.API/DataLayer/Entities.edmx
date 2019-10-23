@@ -30,7 +30,7 @@
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Text" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Date" Type="datetime" Nullable="true" />
-    <Property Name="ImageUrl" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="LinkUrl" Type="nvarchar(max)" Nullable="true" />
     <Property Name="NewsCategoryId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Users">
@@ -87,7 +87,7 @@
           <Property Name="Name" Type="String" Nullable="false" />
           <Property Name="Text" Type="String" Nullable="true" />
           <Property Name="Date" Type="DateTime" />
-          <Property Name="ImageUrl" Type="String" Nullable="true" />
+          <Property Name="LinkUrl" Type="String" Nullable="true" />
           <NavigationProperty Name="NewsCategory" Relationship="Entities.NewsCategoryItem" FromRole="NewsItem" ToRole="NewsCategory" />
           <Property Name="NewsCategoryId" Type="Int32" Nullable="false" />
         </EntityType>
@@ -137,7 +137,7 @@
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Text" ColumnName="Text" />
           <ScalarProperty Name="Date" ColumnName="Date" />
-          <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+          <ScalarProperty Name="LinkUrl" ColumnName="LinkUrl" />
           <ScalarProperty Name="NewsCategoryId" ColumnName="NewsCategoryId" />
         </MappingFragment>
       </EntityTypeMapping>
