@@ -9,14 +9,9 @@
     <EntitySet Name="NewsCategories" EntityType="Entities.Store.NewsCategories" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="NewsItems" EntityType="Entities.Store.NewsItems" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Users" EntityType="Entities.Store.Users" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Tokens" EntityType="Entities.Store.Tokens" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="NewsCategoryItem" Association="Entities.Store.NewsCategoryItem">
       <End Role="NewsCategory" EntitySet="NewsCategories" />
       <End Role="NewsItem" EntitySet="NewsItems" />
-    </AssociationSet>
-    <AssociationSet Name="UserTokens" Association="Entities.Store.UserTokens">
-      <End Role="User" EntitySet="Users" />
-      <End Role="Tokens" EntitySet="Tokens" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="NewsCategories">
@@ -50,16 +45,6 @@
     <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Phone" Type="nvarchar(max)" Nullable="true" />
   </EntityType>
-  <EntityType Name="Tokens">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Date" Type="datetime" Nullable="false" />
-    <Property Name="PrivateKey" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Valid" Type="bit" Nullable="false" />
-    <Property Name="UserId" Type="int" Nullable="false" />
-  </EntityType>
   <Association Name="NewsCategoryItem">
     <End Role="NewsCategory" Type="Entities.Store.NewsCategories" Multiplicity="1" />
     <End Role="NewsItem" Type="Entities.Store.NewsItems" Multiplicity="*" />
@@ -69,18 +54,6 @@
       </Principal>
       <Dependent Role="NewsItem">
         <PropertyRef Name="NewsCategoryId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="UserTokens">
-    <End Role="User" Type="Entities.Store.Users" Multiplicity="1" />
-    <End Role="Tokens" Type="Entities.Store.Tokens" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="User">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Tokens">
-        <PropertyRef Name="UserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -96,11 +69,6 @@
             <End Role="NewsItem" EntitySet="NewsItems" />
           </AssociationSet>
           <EntitySet Name="Users" EntityType="Entities.User" />
-          <EntitySet Name="Tokens" EntityType="Entities.Tokens" />
-          <AssociationSet Name="UserTokens" Association="Entities.UserTokens">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Tokens" EntitySet="Tokens" />
-          </AssociationSet>
         </EntityContainer>
         <EntityType Name="NewsCategory">
           <Key>
@@ -146,31 +114,7 @@
           <Property Name="Email" Type="String" Nullable="false" />
           <Property Name="Password" Type="String" Nullable="false" />
           <Property Name="Phone" Type="String" Nullable="true" />
-          <NavigationProperty Name="Tokens" Relationship="Entities.UserTokens" FromRole="User" ToRole="Tokens" />
         </EntityType>
-        <EntityType Name="Tokens">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Date" Type="DateTime" Nullable="false" />
-          <Property Name="PrivateKey" Type="String" Nullable="false" />
-          <Property Name="Valid" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="Entities.UserTokens" FromRole="Tokens" ToRole="User" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-        </EntityType>
-        <Association Name="UserTokens">
-          <End Type="Entities.User" Role="User" Multiplicity="1" />
-          <End Type="Entities.Tokens" Role="Tokens" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Tokens">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -208,17 +152,6 @@
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="Phone" ColumnName="Phone" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Tokens">
-      <EntityTypeMapping TypeName="IsTypeOf(Entities.Tokens)">
-        <MappingFragment StoreEntitySet="Tokens">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Date" ColumnName="Date" />
-          <ScalarProperty Name="PrivateKey" ColumnName="PrivateKey" />
-          <ScalarProperty Name="Valid" ColumnName="Valid" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

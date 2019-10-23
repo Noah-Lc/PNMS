@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -16,10 +17,12 @@ namespace PNMS.Web.API.Controllers
     {
         EntitiesContainer db = new EntitiesContainer(); //Database context
 
-        public async Task<HttpResponseMessage> POST(string username, string password)
+        public async Task<HttpResponseMessage> POST(FormDataCollection formData)
         {
+            string username = formData["username"];
+            string password = formData["password"];
             //Check if the username and password are valid
-            if(string.IsNullOrEmpty(username) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrEmpty(username) || string.IsNullOrWhiteSpace(password))
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Username or Password not correct");
 
             User user = db.Users.Where(x => x.UserName == username.ToLower()).FirstOrDefault();
@@ -30,7 +33,7 @@ namespace PNMS.Web.API.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Username or Password not correct [password]");
             else
             {
-                var issuer = "http://localhost:52530/";
+                var issuer = "http://localhost:52530/api";
                 var authority = "http://localhost:52530/";
                 var privateKey = "vr8h8cjHjcUbnvGppVLvvV8rWZYvDcTZhjnybn82n72Ay9XzmQh9kmM8jrEfQNXr8mSLANvPfYk4JYwnerhWda9Zyypxwcx2kBhb6f6yTENsjtDgGbBYdfQyXPSLbpXUq2xVtXaMqw5xvR7x7dekjGHAfUs3WjMfuweT9wMEd4RvPwcnFfJKrhUhVmrcYPs3R5pNF9qUenTXppGLUGdCUDegvmMGVqA3FDvwwmPe7ZepK2KTdxhU8cSVEvRAxw8K";
                 var daysValid = 1;

@@ -28,6 +28,5 @@ namespace DataLayer
         public virtual DbSet<NewsCategory> NewsCategories { get; set; }
         public virtual DbSet<NewsItem> NewsItems { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Tokens> Tokens { get; set; }
     }
 }

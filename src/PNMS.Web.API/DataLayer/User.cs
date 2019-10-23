@@ -14,12 +14,6 @@ namespace DataLayer
     
     public partial class User
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User()
-        {
-            this.Tokens = new HashSet<Tokens>();
-        }
-    
         public int Id { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
@@ -27,8 +21,5 @@ namespace DataLayer
         public string Email { get; set; }
         public string Password { get; set; }
         public string Phone { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Tokens> Tokens { get; set; }
     }
 }

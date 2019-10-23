@@ -9,8 +9,6 @@
         <EntityTypeShape EntityType="Entities.NewsItem" Width="1.5" PointX="7.625" PointY="1.625" />
         <AssociationConnector Association="Entities.NewsCategoryItem" />
         <EntityTypeShape EntityType="Entities.User" Width="1.5" PointX="2.875" PointY="4" />
-        <EntityTypeShape EntityType="Entities.Tokens" Width="1.5" PointX="4.875" PointY="5" />
-        <AssociationConnector Association="Entities.UserTokens" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

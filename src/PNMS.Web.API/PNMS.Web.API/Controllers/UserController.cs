@@ -1,9 +1,11 @@
 ﻿using DataLayer;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 
 namespace PNMS.Web.API.Controllers
@@ -14,15 +16,20 @@ namespace PNMS.Web.API.Controllers
 
         /// <summary>
         /// Create new User
-        /// </summary>
+        /// </summary
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="firstname"></param>
         /// <param name="lastname"></param>
         /// <param name="email"></param>
         /// <returns></returns>
-        public HttpResponseMessage POST(string username, string password, string firstname, string lastname, string email)
+        public HttpResponseMessage POST(FormDataCollection formData)
         {
+            string username = formData["username"];
+            string password = formData["password"];
+            string firstname = formData["firstname"];
+            string lastname = formData["lastname"];
+            string email = formData["email"];
             //Check email is its valid
             if (!Utilities.Email.Validation.IsValid(email))
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "You have to specify a valid email address!");
@@ -52,10 +59,17 @@ namespace PNMS.Web.API.Controllers
                 db.Users.Add(newUser);
                 db.SaveChanges();
             }
-            catch
+            catch(Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Oops!");
             }
+
+            return Request.CreateResponse(HttpStatusCode.OK, "User added succesfully");
+        }
+
+        public HttpResponseMessage Get(int id)
+        {
+            //if(id < 0)
 
             return Request.CreateResponse(HttpStatusCode.OK, "User added succesfully");
         }
