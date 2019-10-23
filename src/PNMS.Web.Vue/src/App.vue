@@ -1,13 +1,15 @@
 <template>
-  <div id="app">
-    Welcom to NPMS
-  </div>
+  <main-layout>
+    <router-view />
+  </main-layout>
 </template>
 
 <script>
+  import MainLayout from './layouts/Main.vue'
+
 export default {
-  name: 'app',
   components: {
+    MainLayout
   }
 }
 </script>
