@@ -1,10 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import HomePage from './../components/Home.vue'
-import Dashboard from '../components/Dashboard.vue'
-import Register from '../components/Register.vue'
-import Login from '../components/Login.vue'
+import Dashboard from '../Components/Dashboard.vue'
+import Register from '../Components/Register.vue'
+import Login from '../Components/Login.vue'
 
 Vue.use(Router);
 

@@ -1,4 +1,4 @@
-import { userService } from '../_services';
+import { userService } from '../Services';
 
 export const users = {
     namespaced: true,
@@ -8,12 +8,6 @@ export const users = {
     actions: {
         getAll({ commit }) {
             commit('getAllRequest');
-
-            userService.getAll()
-                .then(
-                    users => commit('getAllSuccess', users),
-                    error => commit('getAllFailure', error)
-                );
         }
     },
     mutations: {

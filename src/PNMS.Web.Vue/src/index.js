@@ -1,11 +1,11 @@
 import Vue from 'vue';
 
-import { store } from './_store';
-import { router } from './_helpers';
+import { store } from './Store';
+import { router } from './Routes';
 import App from './App';
 
 // setup fake backend
-import { configureFakeBackend } from './_helpers';
+import { configureFakeBackend } from './Helpers';
 configureFakeBackend();
 
 import './../public/src/css/style.css'
