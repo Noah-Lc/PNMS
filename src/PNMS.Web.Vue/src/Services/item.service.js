@@ -5,7 +5,8 @@ export const itemService = {
     create,
     getAll,
     getByID,
-    update
+    update,
+    deleteByID
 };
 
 function create(name, text, date, link, categoryid) {
@@ -71,7 +72,7 @@ function getByID(id) {
 
 function deleteByID(id) {
     const requestOptions = {
-        method: 'GET',
+        method: 'DELETE',
         headers: authHeader({ 'Content-Type': 'application/json' })
     };
 

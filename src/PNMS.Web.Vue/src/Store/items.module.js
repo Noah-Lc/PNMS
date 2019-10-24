@@ -7,7 +7,6 @@ export const items = {
     },
     actions: {
         getAll({ commit }) {
-            commit('getAllRequest');
             itemService.getAll()
                 .then(
                     items => commit('getAllSuccess', items),
@@ -18,10 +17,9 @@ export const items = {
             itemService.create(name, text, date, link, 1)
                 .then(
                     item => {
-                        commit('createSuccess', item);
+                        //commit('AddItemSuccess', item);
                     },
                     error => {
-                        commit('createFailure', error);
                         dispatch('alert/error', error, { root: true });
                     }
                 );
@@ -30,18 +28,19 @@ export const items = {
             itemService.update(id, name, text, date, link, 1)
                 .then(
                     item => {
-                        commit('createSuccess', item);
+                        //commit('UpdateItemmSuccess', {id: id, name: name, text: text, date: date, link: link,categoryid: 1})
                     },
                     error => {
-                        commit('createFailure', error);
                         dispatch('alert/error', error, { root: true });
                     }
                 );
         },
         delete({ dispatch, commit }, { id }) {
-            itemService.delete(id)
+            commit('');
+            itemService.deleteByID(id)
                 .then(
                     item => {
+                        //commit('DeleteItemSuccess', item)
                     },
                     error => {
                         dispatch('alert/error', error, { root: true });
@@ -59,13 +58,19 @@ export const items = {
         getAllFailure(state, error) {
             state.all = { error };
         },
-        createSuccess(state, item) {
-            state.status = { created: true };
-            state.item = item;
+        AddItemSuccess(state, item) {
+            state.all.items.push(item);
         },
-        createFailure(state) {
-            state.status = {};
-            state.user = null;
+        UpdateItemmSuccess(state, item) {
+            const updatedItems = [...state.all.items];
+            const indexItem = state.all.items.findIndex(i => item.id === i.id);
+            updatedItems[indexItem] = item;
+            state.all = { items: updatedItems };
+            console.log(indexItem);
+
         },
+        DeleteItemSuccess(state, item) {
+            state.all = { update: item };
+        }
     }
 }

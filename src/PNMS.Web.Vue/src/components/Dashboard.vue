@@ -146,7 +146,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-danger">Delete</button>
+                                    <button type="button" class="btn btn-danger" v-on:click="confirmationDeleteCategory()">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -216,7 +216,8 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" v-on:click="createCategory()">Create</button>
+                                    <button v-if="category.new" type="button" class="btn btn-primary" v-on:click="createCategory()">Create</button>
+                                    <button v-if="!category.new" type="button" class="btn btn-primary" v-on:click="updateCategory()">Update</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="clearModal()">Close</button>
                                 </div>
                             </div>
@@ -277,14 +278,14 @@ export default {
                 this.item.id = item.Id;
                 this.item.name = item.Name;
                 this.item.text = item.Text;
-                this.item.date = moment(String(item.Date)).format('YYYY-DD-MM')
+                this.item.date = moment(String(item.Date)).format('YYYY-MM-DD');
                 this.item.link = item.LinkUrl;
                 this.item.new = false;
                 
                 console.log(this.item.date);
             }
         },
-        updateItem: function (id) {
+        updateItem: function () {
             // `id` is the id of Item
             if (this.item.id) {
                 this.category.submitted = true;
@@ -293,29 +294,61 @@ export default {
                 
                 if (name && text && date && link) {
                     dispatch('items/update', { id, name, text, date, link });
-                    this.$store.dispatch('items/getAll');
                     $('#modalItems').modal('toggle');
                 }
             }
         },
-        deleteItem: function () {
+        deleteItem: function (id) {
+            // `id` is the id of Item
+            this.item.id = id;
+        },
+        confirmationDeleteItem: function () {
             // `id` is the id of Item
             const id = this.item.id;
+            const { dispatch } = this.$store;
             if (id) {
                 dispatch('items/delete', { id });
-                this.$store.dispatch('items/getAll');
+                refreshData();
             }
         },
         editCategory: function (id) {
             // `id` is the id of Item
             if (id) {
+                let category = this.categories.items.find(category => category.Id === id);
+                this.category.id = category.Id;
+                this.category.name = category.Name;
+                this.fileName = category.ImageUrl;
+                this.category.new = false;
+            }
+        },
+        updateCategory(){
+            if (this.category.id) {
+                this.category.submitted = true;
+                const { id, name, image } = this.category;
+                const { dispatch } = this.$store;
                 
+                if (name) {
+                    dispatch('categories/update', { id, name, image });
+                    this.$store.dispatch('categories/getAll');
+                    $('#modalCategories').modal('toggle');
+                    refreshData();
+                }
             }
         },
         deleteCategory: function (id) {
             // `id` is the id of Item
             if (id) {
-                
+                 this.category.id = id;
+            }
+        },
+        confirmationDeleteCategory: function () {
+            // `id` is the id of Item
+            const id = this.category.id;
+            const { dispatch } = this.$store;
+            if (id) {
+                dispatch('categories/delete', { id });
+                this.$store.dispatch('categories/getAll');
+                refreshData();
             }
         },
         createItem(){ 
@@ -325,8 +358,8 @@ export default {
             
             if (name && text && date && link) {
                 dispatch('items/create', { name, text, date, link });
-                this.$store.dispatch('items/getAll');
                 $('#modalItems').modal('toggle');
+                refreshData();
             }
         },
         createCategory(){
@@ -336,14 +369,19 @@ export default {
             
             if (name, image) {
                 dispatch('categories/create', { name, image });
-                this.$store.dispatch('categories/getAll');
                 $('#modalCategory').modal('toggle');
+                refreshData();
             }
         },
         clearModal(){
             this.category = {name: '', image: '', submitted: false, new: true};
             this.item = {name: '', text: '', date: '', link: '', submitted: false, new: true};
             this.fileName = '';
+        },
+        refreshData()
+        {
+            this.$store.dispatch('categories/getAll');
+            this.$store.dispatch('items/getAll');
         }
     },
     created () {

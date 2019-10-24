@@ -26,8 +26,20 @@ export const categories = {
                     }
                 );
         },
+        update({ dispatch, commit }, { id, name, image }) {
+            categoryService.update(id, name, image)
+                .then(
+                    category => {
+                        commit('createSuccess', category);
+                    },
+                    error => {
+                        commit('createFailure', error);
+                        dispatch('alert/error', error, { root: true });
+                    }
+                );
+        },
         delete({ dispatch, commit }, { id }) {
-            categoryService.delete(id)
+            categoryService.DeleteByID(id)
                 .then(
                     category => {
                     },

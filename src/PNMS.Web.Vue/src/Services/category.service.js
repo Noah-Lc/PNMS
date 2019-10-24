@@ -4,7 +4,9 @@ import { authHeader } from '../Helpers';
 export const categoryService = {
     create,
     getAll,
-    getByID
+    getByID,
+    update,
+    DeleteByID
 };
 
 function create(name, ImageUrl) {
@@ -26,11 +28,12 @@ function create(name, ImageUrl) {
     });
 }
 
-function update(name, ImageUrl) {
+function update(id, name, ImageUrl) {
 
     let data = new FormData();
-
+    data.append('id', id)
     data.append('name', name)
+    if(ImageUrl)
     data.append('ImageUrl', ImageUrl)
 
     const requestOptions = {
@@ -58,6 +61,15 @@ function getAll() {
 function getByID(id) {
     const requestOptions = {
         method: 'GET',
+        headers: authHeader({ 'Content-Type': 'application/json' })
+    };
+
+    return fetch(`${config.apiUrl}/api/Category/${id}`, requestOptions);
+}
+
+function DeleteByID(id) {
+    const requestOptions = {
+        method: 'DELETE',
         headers: authHeader({ 'Content-Type': 'application/json' })
     };
 
