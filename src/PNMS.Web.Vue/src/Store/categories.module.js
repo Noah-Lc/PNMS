@@ -13,7 +13,29 @@ export const categories = {
                     categories => commit('getAllSuccess', categories),
                     error => commit('getAllFailure', error)
                 );
-        }
+        },
+        create({ dispatch, commit }, { name, image }) {
+            categoryService.create(name, image)
+                .then(
+                    category => {
+                        commit('createSuccess', category);
+                    },
+                    error => {
+                        commit('createFailure', error);
+                        dispatch('alert/error', error, { root: true });
+                    }
+                );
+        },
+        delete({ dispatch, commit }, { id }) {
+            categoryService.delete(id)
+                .then(
+                    category => {
+                    },
+                    error => {
+                        dispatch('alert/error', error, { root: true });
+                    }
+                );
+        },
     },
     mutations: {
         getAllRequest(state) {
@@ -24,6 +46,14 @@ export const categories = {
         },
         getAllFailure(state, error) {
             state.all = { error };
-        }
+        },
+        createSuccess(state, category) {
+            state.status = { created: true };
+            state.category = category;
+        },
+        createFailure(state) {
+            state.status = {};
+            state.category = null;
+        },
     }
 }

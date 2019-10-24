@@ -42,7 +42,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="float-left mt-2">Items Table</h4>
-                                    <button class="mr-3 btn btn-primary float-right" data-toggle="modal" data-target="#createCategory">New Item</button>
+                                    <button class="mr-3 btn btn-primary float-right" data-toggle="modal" data-target="#modalItem">New Item</button>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -60,15 +60,15 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="item in items.items" :key="item.id">
-                                                    <th scope="row">{{ item.id }}</th>
-                                                    <td>{{ item.name }}</td>
-                                                    <td>{{ item.text }}</td>
-                                                    <td>{{ item.date }}</td>
-                                                    <td><a href="#">{{ item.link }}</a></td>
+                                                <tr v-for="item in items.items" :key="item.Id">
+                                                    <th scope="row">{{ item.Id }}</th>
+                                                    <td>{{ item.Name }}</td>
+                                                    <td>{{ item.Text }}</td>
+                                                    <td>{{ item.Date }}</td>
+                                                    <td><a href="#">{{ item.LinkUrl }}</a></td>
                                                     <td>
-                                                        <button class="mr-3 btn btn-danger" v-on:click="editItem(item.id)" data-toggle="modal" data-target="#confirmationDelete"></button>
-                                                        <button class="btn btn-info" v-on:click="deleteItem(item.id)" data-toggle="modal" data-target="#createCategory"></button>
+                                                        <button class="mr-3 btn btn-danger" v-on:click="deleteItem(item.Id)" data-toggle="modal" data-target="#confirmationDelete"></button>
+                                                        <button class="btn btn-info" v-on:click="editItem(item.Id)" data-toggle="modal" data-target="#modalItem"></button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -81,7 +81,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="float-left mt-2">Categories Table</h4>
-                                    <button class="mr-3 btn btn-primary float-right" data-toggle="modal" data-target="#createItem">New Category</button>
+                                    <button class="mr-3 btn btn-primary float-right" data-toggle="modal" data-target="#modalCategory">New Category</button>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -97,13 +97,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="category in categories.items" :key="category.id">
-                                                    <th scope="row">{{ category.id }}</th>
-                                                    <td>{{ category.name }}</td>
-                                                    <td>{{ category.image }}</td>
+                                                <tr v-for="category in categories.items" :key="category.Id">
+                                                    <th scope="row">{{ category.Id }}</th>
+                                                    <td>{{ category.Name }}</td>
+                                                    <td>{{ category.ImageUrl }}</td>
                                                     <td>
-                                                        <button class="mr-3 btn btn-danger" v-on:click="editCategory(item.id)" data-toggle="modal" data-target="#confirmationCategory"></button>
-                                                        <button class="btn btn-info"  v-on:click="deleteCategory(item.id)" data-toggle="modal" data-target="#createCategory"></button>
+                                                        <button class="mr-3 btn btn-danger" v-on:click="deleteCategory(category.Id)" data-toggle="modal" data-target="#confirmationCategory"></button>
+                                                        <button class="btn btn-info"  v-on:click="editCategory(category.Id)" data-toggle="modal" data-target="#modalCategory"></button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -127,7 +127,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-danger">Delete</button>
+                                    <button type="button" class="btn btn-danger" v-on:click="confirmationDeleteItem()">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -151,7 +151,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal" id="createCategory" tabindex="-1" role="dialog">
+                    <div class="modal" id="modalItem" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -177,19 +177,20 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Link</label>
-                                            <input type="text" v-model="item.link" placeholder="Date" class="form-control" :class="{ 'is-invalid': item.submitted && !item.link }">
+                                            <input type="text" v-model="item.link" placeholder="Link" class="form-control" :class="{ 'is-invalid': item.submitted && !item.link }">
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" v-on:click="createItem()">Create</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button v-if="item.new" type="button" class="btn btn-primary" v-on:click="createItem()">Create</button>
+                                    <button v-if="!item.new" type="button" class="btn btn-primary" v-on:click="updateItem()">Update</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="clearModal()">Close</button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="modal" id="createItem" tabindex="-1" role="dialog">
+                    <div class="modal" id="modalCategory" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -203,20 +204,20 @@
                                     <form>
                                         <div class="form-group">
                                             <label>Name</label>
-                                            <input type="text" placeholder="Name Category" class="form-control">
+                                            <input type="text" v-model="category.name" placeholder="Name Category" class="form-control">
                                         </div>
                                         <div class="form-group">
                                             <label>Image</label>
                                             <div class="box">
-                                                <input type="file" name="file-7[]" id="file-7" class="inputfile inputfile-6" data-multiple-caption="{count} files selected" multiple />
-                                                <label for="file-7"><span class="form-control"></span> <strong class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg></strong></label>
+                                                <input type="file" name="file-7[]" id="file-7" class="inputfile inputfile-6" data-multiple-caption="{count} files selected" multiple @change="onFileChanged" />
+                                                <label for="file-7"><span class="form-control" v-html="fileName"></span> <strong class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg></strong></label>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">Create</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" v-on:click="createCategory()">Create</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="clearModal()">Close</button>
                                 </div>
                             </div>
                         </div>
@@ -228,20 +229,27 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
     data () {
         return {
+            fileName: '',
             item :{
+                id: '',
                 name: '',
                 text: '',
                 date: '',
                 link: '',
-                submitted: false
+                submitted: false,
+                new: true
             },
             category :{
+                id: '',
                 name: '',
-                image: '',
-                submitted: false
+                image: null,
+                submitted: false,
+                new: true
             }
         }
     },
@@ -258,16 +266,44 @@ export default {
     },
     // define methods under the `methods` object
     methods: {
+        onFileChanged (event) {
+            this.category.image = event.target.files[0]
+            this.fileName = this.category.image.name;
+        },
         editItem: function (id) {
             // `id` is the id of Item
             if (id) {
+                let item = this.items.items.find(item => item.Id === id);
+                this.item.id = item.Id;
+                this.item.name = item.Name;
+                this.item.text = item.Text;
+                this.item.date = moment(String(item.Date)).format('YYYY-DD-MM')
+                this.item.link = item.LinkUrl;
+                this.item.new = false;
                 
+                console.log(this.item.date);
             }
         },
-        deleteItem: function (id) {
+        updateItem: function (id) {
             // `id` is the id of Item
-            if (id) {
+            if (this.item.id) {
+                this.category.submitted = true;
+                const { id, name, text, date, link } = this.item;
+                const { dispatch } = this.$store;
                 
+                if (name && text && date && link) {
+                    dispatch('items/update', { id, name, text, date, link });
+                    this.$store.dispatch('items/getAll');
+                    $('#modalItems').modal('toggle');
+                }
+            }
+        },
+        deleteItem: function () {
+            // `id` is the id of Item
+            const id = this.item.id;
+            if (id) {
+                dispatch('items/delete', { id });
+                this.$store.dispatch('items/getAll');
             }
         },
         editCategory: function (id) {
@@ -282,28 +318,32 @@ export default {
                 
             }
         },
-        createItem(){
-            this.item.submitted = true;
+        createItem(){ 
+            this.category.submitted = true;
             const { name, text, date, link } = this.item;
             const { dispatch } = this.$store;
-            console.log(name, text, date, link);
+            
             if (name && text && date && link) {
                 dispatch('items/create', { name, text, date, link });
                 this.$store.dispatch('items/getAll');
-                $('#createCategory').modal('toggle');
-                this.item = {name: '', text: '', date: '', link: '', submitted: false}
+                $('#modalItems').modal('toggle');
             }
         },
         createCategory(){
-            this.item.submitted = true;
-            const { name, text, date, link } = this;
+            this.category.submitted = true;
+            const { name, image } = this.category;
             const { dispatch } = this.$store;
-            console.log(name, text, date, link);
-            if (name && text && date && link) {
-                dispatch('items/create', { name, text, date, link });
-                this.$store.dispatch('items/getAll');
-                $('#createCategory').modal('toggle');
+            
+            if (name, image) {
+                dispatch('categories/create', { name, image });
+                this.$store.dispatch('categories/getAll');
+                $('#modalCategory').modal('toggle');
             }
+        },
+        clearModal(){
+            this.category = {name: '', image: '', submitted: false, new: true};
+            this.item = {name: '', text: '', date: '', link: '', submitted: false, new: true};
+            this.fileName = '';
         }
     },
     created () {

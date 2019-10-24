@@ -15,13 +15,35 @@ export const items = {
                 );
         },
         create({ dispatch, commit }, { name, text, date, link }) {
-            itemService.create(name, text, date, link)
+            itemService.create(name, text, date, link, 1)
                 .then(
                     item => {
                         commit('createSuccess', item);
                     },
                     error => {
                         commit('createFailure', error);
+                        dispatch('alert/error', error, { root: true });
+                    }
+                );
+        },
+        update({ dispatch, commit }, { id, name, text, date, link }) {
+            itemService.update(id, name, text, date, link, 1)
+                .then(
+                    item => {
+                        commit('createSuccess', item);
+                    },
+                    error => {
+                        commit('createFailure', error);
+                        dispatch('alert/error', error, { root: true });
+                    }
+                );
+        },
+        delete({ dispatch, commit }, { id }) {
+            itemService.delete(id)
+                .then(
+                    item => {
+                    },
+                    error => {
                         dispatch('alert/error', error, { root: true });
                     }
                 );

@@ -7,11 +7,36 @@ export const categoryService = {
     getByID
 };
 
-function create(name, image) {
+function create(name, ImageUrl) {
+
+    let data = new FormData();
+
+    data.append('name', name)
+    data.append('ImageUrl', ImageUrl)
+
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'multipart/form-data' },
-        body: JSON.stringify({ name, image })
+        headers: authHeader({ 'Content-Type': 'multipart/form-data' }),
+        body: data
+    };
+
+    return fetch(`${config.apiUrl}/api/Category`, requestOptions)
+        .then(user => {
+            return user;
+    });
+}
+
+function update(name, ImageUrl) {
+
+    let data = new FormData();
+
+    data.append('name', name)
+    data.append('ImageUrl', ImageUrl)
+
+    const requestOptions = {
+        method: 'PUT',
+        headers: authHeader({ 'Content-Type': 'multipart/form-data' }),
+        body: data
     };
 
     return fetch(`${config.apiUrl}/api/Category`, requestOptions)
