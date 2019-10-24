@@ -179,7 +179,7 @@ namespace PNMS.Web.API.Controllers
             int categoryID = int.Parse(HttpContext.Current.Request.Params["categoryid"]);
             string linkUrl = HttpContext.Current.Request.Params["link"];
             string text = HttpContext.Current.Request.Params["text"];
-            DateTime date = DateTime.Parse(HttpContext.Current.Request.Params["text"]);
+            DateTime date = DateTime.Parse(HttpContext.Current.Request.Params["date"]);
             if (id < 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your id!!!!");
             NewsItem news = db.NewsItems.Where(x => x.Id == id).FirstOrDefault();

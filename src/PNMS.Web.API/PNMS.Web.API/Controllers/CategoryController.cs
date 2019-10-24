@@ -182,7 +182,6 @@ namespace PNMS.Web.API.Controllers
                             try
                             {
                                 Category.Image = postedFile.FileName;
-                                Category.Name = name.ToLower();
                                 db.SaveChanges();
                             }
                             catch
@@ -194,13 +193,7 @@ namespace PNMS.Web.API.Controllers
 
                         }
                     }
-
-                    var message1 = string.Format("Category updated succefully!");
-                    return Request.CreateErrorResponse(HttpStatusCode.Created, message1); ;
                 }
-                var res = string.Format("Please Upload a image.");
-                dict.Add("error", res);
-                return Request.CreateResponse(HttpStatusCode.NotFound, dict);
             }
             catch (Exception ex)
             {
@@ -208,6 +201,20 @@ namespace PNMS.Web.API.Controllers
                 dict.Add("error", res);
                 return Request.CreateResponse(HttpStatusCode.NotFound, dict);
             }
+
+            try
+            {
+                Category.Name = name.ToLower();
+                db.SaveChanges();
+            }
+            catch
+            {
+                var msg = string.Format("Somehting Went wrong!");
+                dict.Add("error", msg);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, dict);
+            }
+            var message1 = string.Format("Category updated succefully!");
+            return Request.CreateErrorResponse(HttpStatusCode.Created, message1); ;
         }
 
         // DELETE: api/Category/5
