@@ -9,6 +9,7 @@ namespace PNMS.Web.API
     {
         public static void Register(HttpConfiguration config)
         {
+            //For testing from any client
             var cors = new EnableCorsAttribute("*", "*", "*"); //For test Only
             config.EnableCors(cors);
 
@@ -17,7 +18,7 @@ namespace PNMS.Web.API
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-
+            //Removing the xml response option to use only json as response to users requests
             var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
             config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
 

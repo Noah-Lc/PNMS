@@ -123,14 +123,15 @@ namespace PNMS.Web.API.Controllers
         [AllowAnonymous]
         public HttpResponseMessage GetByLink(string url)
         {
+            //Is url empty or null
             if (string.IsNullOrEmpty(url))
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your url");
-
+            //Get news from database
             NewsItem news = db.NewsItems.Where(x => x.LinkUrl == url.ToLower()).FirstOrDefault();
             if (news == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your data, no news was found!");
 
-
+            //Return Data as json
             return Request.CreateResponse(HttpStatusCode.OK, new News()
             {
                 Name = news.Name,
@@ -155,14 +156,20 @@ namespace PNMS.Web.API.Controllers
             string linkUrl = HttpContext.Current.Request.Params["link"];
             int categoryID = int.Parse(HttpContext.Current.Request.Params["categoryid"]);
             DateTime date = DateTime.Parse(HttpContext.Current.Request.Params["date"]);
-
-            if(categoryID < 0)
+            //Verify if all the data required is valid
+            if(string.IsNullOrEmpty(name) || date == null || string.IsNullOrEmpty(text))
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Name, Text and date are requierd, please check your request!");
+            //Check if the category id is not negative
+            if (categoryID < 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check the category id!!!!");
+            //Get Category from database
             NewsCategory newsCategory = db.NewsCategories.Where(x => x.Id == categoryID).FirstOrDefault();
             if(newsCategory == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your data, no category was found!");
-            if(!Utilities.URL.Validator.HasSpecialChars(linkUrl))
+            //Check if the url is valid and contains no special char
+            if (!Utilities.URL.Validator.HasSpecialChars(linkUrl))
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check the link your provided, no special characters are allowded!");
+            //Create new item
             NewsItem news = new NewsItem()
             {
                 Name = name.ToLower(),
@@ -174,6 +181,7 @@ namespace PNMS.Web.API.Controllers
 
             try
             {
+                //Save it to Database
                 db.NewsItems.Add(news);
                 db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, $"{news.Name} added succefully!");
@@ -194,17 +202,21 @@ namespace PNMS.Web.API.Controllers
             string linkUrl = HttpContext.Current.Request.Params["link"];
             string text = HttpContext.Current.Request.Params["text"];
             DateTime date = DateTime.Parse(HttpContext.Current.Request.Params["date"]);
+            //Check id if not negative
             if (id < 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your id!!!!");
+            //Get news from database
             NewsItem news = db.NewsItems.Where(x => x.Id == id).FirstOrDefault();
             if (news == null)
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Please check your data, no news was found!");
-
+            //Check category id if not negative for updating
             if (categoryID < 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check the category id!!!!");
+            //Get the category from the database
             NewsCategory newsCategory = db.NewsCategories.Where(x => x.Id == categoryID).FirstOrDefault();
             if (newsCategory == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your data, no category was found!");
+            //Verify if the link is valid
             if (!Utilities.URL.Validator.HasSpecialChars(linkUrl))
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check the link your provided, no special characters are allowded!");
             try
@@ -229,14 +241,16 @@ namespace PNMS.Web.API.Controllers
         [HttpDelete]
         public HttpResponseMessage Delete(int id)
         {
+            //Verify the id if not negative
             if (id < 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your id!!!!");
-
+            //Get news from the database
             NewsItem news = db.NewsItems.Where(x => x.Id == id).FirstOrDefault();
             if (news == null)
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Please check your data, no news was found!");
             try
             {
+                //Delete it
                 db.NewsItems.Remove(news);
                 db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, $"{news.Name} removed succefully!");

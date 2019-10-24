@@ -27,14 +27,14 @@ namespace PNMS.Web.API.Controllers
             //Check if the username and password are valid
             if (string.IsNullOrEmpty(username) || string.IsNullOrWhiteSpace(password))
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Username or Password not correct");
-
+            //Get user from database
             User user = db.Users.Where(x => x.UserName == username.ToLower()).FirstOrDefault();
             if(user == null)
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Username or Password not correct [user]");
-
+            //Verify user password
             if (!Utilities.PasswordHasher.Verify(password, user.Password))
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Username or Password not correct [password]");
-            else
+            else//If everything is GOOD
             {
                 var issuer = "http://localhost:52530/api";
                 var authority = "http://localhost:52530/";
@@ -42,7 +42,7 @@ namespace PNMS.Web.API.Controllers
                 var daysValid = 1;
 
                 var createJwt = await Handlers.AuthentificationTokenGenerator.CreateJWTAsync(user, issuer, authority, privateKey, daysValid);
-
+                //Return Token to user
                 return Request.CreateResponse(HttpStatusCode.OK, new Dictionary<string, string>() {
                     { "access_token", createJwt },
                     { "token_type", "bearer" },

@@ -16,6 +16,14 @@ namespace PNMS.Web.API.Handlers
 {
     internal class AuthenticationHandler : DelegatingHandler
     {
+        /// <summary>
+        /// Getting the users request and checking if they need an authorization
+        /// If they do, they need to have a bearer token
+        /// If no token is given, an 403 is send as response
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var validToken = false;
@@ -43,7 +51,13 @@ namespace PNMS.Web.API.Handlers
 
             return response;
         }
-
+        /// <summary>
+        /// Extract the token, if exist, from the header of a request
+        /// if found, a token is returned back to be verified
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         private bool TokenExists(HttpRequestMessage request, out string token)
         {
             var tokenFound = false;
@@ -62,6 +76,11 @@ namespace PNMS.Web.API.Handlers
             return tokenFound;
         }
 
+        /// <summary>
+        /// Velid the token and return a true or false as response
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         private async Task<bool> ValidateTokenAsync(string token)
         {
             var userIsValid = true; // assumed user is good (but could be false)
@@ -82,6 +101,10 @@ namespace PNMS.Web.API.Handlers
             return await Task.FromResult(userIsValid);
         }
 
+        /// <summary>
+        /// Get default params for verifying a token
+        /// </summary>
+        /// <returns></returns>
         private TokenValidationParameters GetTokenValidationParameters()
         {
             // Cleanup
@@ -98,6 +121,14 @@ namespace PNMS.Web.API.Handlers
             };
         }
 
+        /// <summary>
+        /// Verify the token life time, is it valid or expired
+        /// </summary>
+        /// <param name="notBefore"></param>
+        /// <param name="expires"></param>
+        /// <param name="securityToken"></param>
+        /// <param name="validationParameters"></param>
+        /// <returns></returns>
         private bool LifetimeValidator(
             DateTime? notBefore,
             DateTime? expires,

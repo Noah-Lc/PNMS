@@ -54,8 +54,14 @@ namespace PNMS.Web.API.Controllers
         [HttpPost]
         public HttpResponseMessage Store()
         {
+            //Check if the name is not null
             string name = HttpContext.Current.Request.Params["name"];
+            if(string.IsNullOrEmpty(name))
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Please a name is requierd!");
 
+            //Get the file from the request and save to Uploads directory and save the name to the database
+            //No crop is done to the pictures
+            //A filtere for extensions is applied
             Dictionary<string, object> dict = new Dictionary<string, object>();
             try
             {
@@ -223,14 +229,16 @@ namespace PNMS.Web.API.Controllers
         [HttpDelete]
         public HttpResponseMessage Delete(int id)
         {
+            //Check if the id is not negative
             if(id < 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your id!!!!");
-
+            //Get category object from database
             NewsCategory newsCategory = db.NewsCategories.Where(x => x.Id == id).FirstOrDefault();
             if (newsCategory == null)
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Please check your data, no category was found!");
             try
             {
+                //Delete it
                 db.NewsCategories.Remove(newsCategory);
                 db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, $"{newsCategory.Name} removed succefully!");

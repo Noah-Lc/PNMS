@@ -11,6 +11,11 @@ namespace PNMS.Utilities
     {
         public class Validator
         {
+            /// <summary>
+            /// Verify is string contains any special chars
+            /// </summary>
+            /// <param name="url"></param>
+            /// <returns></returns>
             public static bool HasSpecialChars(string url)
             {
                 var regexItem = new Regex("^[a-zA-Z0-9 ]*$");

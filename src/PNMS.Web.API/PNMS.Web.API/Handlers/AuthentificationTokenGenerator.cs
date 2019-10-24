@@ -10,6 +10,15 @@ namespace PNMS.Web.API.Handlers
 {
     public class AuthentificationTokenGenerator
     {
+        /// <summary>
+        /// Generate a token for users that login with username and password
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="issuer"></param>
+        /// <param name="authority"></param>
+        /// <param name="symSec"></param>
+        /// <param name="daysValid"></param>
+        /// <returns></returns>
         public static async Task<string> CreateJWTAsync(
             User user,
             string issuer,
