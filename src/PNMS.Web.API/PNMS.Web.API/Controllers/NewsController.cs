@@ -31,7 +31,8 @@ namespace PNMS.Web.API.Controllers
                     LinkUrl = item.LinkUrl,
                     Text = item.Text,
                     CategoryID = item.NewsCategory.Id,
-                    CategoryName = item.NewsCategory.Name
+                    CategoryName = item.NewsCategory.Name,
+                    ShotDate = item.Date.Value.ToString("MM-dd")
                 });
             }
             return news;
@@ -54,7 +55,8 @@ namespace PNMS.Web.API.Controllers
                         LinkUrl = item.LinkUrl,
                         Text = item.Text,
                         CategoryID = item.NewsCategory.Id,
-                        CategoryName = item.NewsCategory.Name
+                        CategoryName = item.NewsCategory.Name,
+                        ShotDate = item.Date.Value.ToString("MM-dd")
                     });
                 }
             }
@@ -72,7 +74,8 @@ namespace PNMS.Web.API.Controllers
                         LinkUrl = item.LinkUrl,
                         Text = item.Text,
                         CategoryID = item.NewsCategory.Id,
-                        CategoryName = item.NewsCategory.Name
+                        CategoryName = item.NewsCategory.Name,
+                        ShotDate = item.Date.Value.ToString("MM-dd")
                     });
                 }
             }
@@ -99,7 +102,8 @@ namespace PNMS.Web.API.Controllers
                 LinkUrl = news.LinkUrl,
                 Text = news.Text,
                 CategoryID = news.NewsCategory.Id,
-                CategoryName = news.NewsCategory.Name
+                CategoryName = news.NewsCategory.Name,
+                ShotDate = news.Date.Value.ToString("MM-dd")
             });
         }
 
@@ -123,7 +127,8 @@ namespace PNMS.Web.API.Controllers
                 LinkUrl = news.LinkUrl,
                 Text = news.Text,
                 CategoryID = news.NewsCategory.Id,
-                CategoryName = news.NewsCategory.Name
+                CategoryName = news.NewsCategory.Name,
+                ShotDate = news.Date.Value.ToString("MM-dd")
             });
         }
 

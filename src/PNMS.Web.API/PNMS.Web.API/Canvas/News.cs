@@ -12,6 +12,7 @@ namespace PNMS.Web.API.Canvas
         public string LinkUrl { get; set; }
         public string Text { get; set; }
         public DateTime? Date { get; set; }
+        public string ShotDate { get; set; }
         public string CategoryName { get; set; }
         public int CategoryID { get; set; }
     }
