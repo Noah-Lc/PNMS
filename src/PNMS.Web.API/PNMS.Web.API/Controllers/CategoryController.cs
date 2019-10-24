@@ -13,7 +13,7 @@ using System.Web.Http.Cors;
 namespace PNMS.Web.API.Controllers
 {
     [Authorize]
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")] //For test Only
     public class CategoryController : ApiController
     {
         EntitiesContainer db = new EntitiesContainer(); //Database context
