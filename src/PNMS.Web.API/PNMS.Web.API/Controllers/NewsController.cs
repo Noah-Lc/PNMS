@@ -18,6 +18,7 @@ namespace PNMS.Web.API.Controllers
         EntitiesContainer db = new EntitiesContainer(); //Database context
 
         // GET: api/News
+        [AllowAnonymous]
         public IEnumerable<News> Get()
         {
             List<News> news = new List<News>();
@@ -29,6 +30,8 @@ namespace PNMS.Web.API.Controllers
                     Date = item.Date,
                     Id = item.Id,
                     LinkUrl = item.LinkUrl,
+                    NormalDate = item.Date.Value.ToShortDateString(),
+                    LongDate = item.Date.Value.ToLongDateString(),
                     Text = item.Text,
                     CategoryID = item.NewsCategory.Id,
                     CategoryName = item.NewsCategory.Name,
@@ -39,6 +42,7 @@ namespace PNMS.Web.API.Controllers
         }
 
         // GET: api/News
+        [AllowAnonymous]
         public IEnumerable<News> GetByCategory(string category)
         {
             List<News> news = new List<News>();
@@ -52,8 +56,10 @@ namespace PNMS.Web.API.Controllers
                         Name = item.Name,
                         Date = item.Date,
                         Id = item.Id,
+                        LongDate = item.Date.Value.ToLongDateString(),
                         LinkUrl = item.LinkUrl,
                         Text = item.Text,
+                        NormalDate = item.Date.Value.ToShortDateString(),
                         CategoryID = item.NewsCategory.Id,
                         CategoryName = item.NewsCategory.Name,
                         ShotDate = item.Date.Value.ToString("MM-dd")
@@ -72,6 +78,8 @@ namespace PNMS.Web.API.Controllers
                         Date = item.Date,
                         Id = item.Id,
                         LinkUrl = item.LinkUrl,
+                        LongDate = item.Date.Value.ToLongDateString(),
+                        NormalDate = item.Date.Value.ToShortDateString(),
                         Text = item.Text,
                         CategoryID = item.NewsCategory.Id,
                         CategoryName = item.NewsCategory.Name,
@@ -84,6 +92,7 @@ namespace PNMS.Web.API.Controllers
 
         // GET: api/News/5
         [HttpGet]
+        [AllowAnonymous]
         public HttpResponseMessage Get(int id)
         {
             if (id < 0)
@@ -100,6 +109,8 @@ namespace PNMS.Web.API.Controllers
                 Date = news.Date,
                 Id = news.Id,
                 LinkUrl = news.LinkUrl,
+                LongDate = news.Date.Value.ToLongDateString(),
+                NormalDate = news.Date.Value.ToShortDateString(),
                 Text = news.Text,
                 CategoryID = news.NewsCategory.Id,
                 CategoryName = news.NewsCategory.Name,
@@ -109,6 +120,7 @@ namespace PNMS.Web.API.Controllers
 
         // GET: api/News/5
         [HttpGet]
+        [AllowAnonymous]
         public HttpResponseMessage GetByLink(string url)
         {
             if (string.IsNullOrEmpty(url))
@@ -125,7 +137,9 @@ namespace PNMS.Web.API.Controllers
                 Date = news.Date,
                 Id = news.Id,
                 LinkUrl = news.LinkUrl,
+                LongDate = news.Date.Value.ToLongDateString(),
                 Text = news.Text,
+                NormalDate = news.Date.Value.ToShortDateString(),
                 CategoryID = news.NewsCategory.Id,
                 CategoryName = news.NewsCategory.Name,
                 ShotDate = news.Date.Value.ToString("MM-dd")

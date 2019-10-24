@@ -19,6 +19,7 @@ namespace PNMS.Web.API.Controllers
         EntitiesContainer db = new EntitiesContainer(); //Database context
 
         // GET: api/Category
+        [AllowAnonymous]
         public IEnumerable<Category> Get()
         {
             List<Category> categories = new List<Category>();
@@ -36,6 +37,7 @@ namespace PNMS.Web.API.Controllers
 
         // GET: api/Category/5
         [HttpGet]
+        [AllowAnonymous]
         public HttpResponseMessage Get(int id)
         {
             if (id < 0)

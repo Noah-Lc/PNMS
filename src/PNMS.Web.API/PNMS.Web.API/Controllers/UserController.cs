@@ -27,6 +27,7 @@ namespace PNMS.Web.API.Controllers
         /// <param name="email"></param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         public HttpResponseMessage POST(FormDataCollection formData)
         {
             string username = formData["username"];

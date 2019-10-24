@@ -15,5 +15,7 @@ namespace PNMS.Web.API.Canvas
         public string ShotDate { get; set; }
         public string CategoryName { get; set; }
         public int CategoryID { get; set; }
+        public string LongDate { get; set; }
+        public string NormalDate { get; set; }
     }
 }
