@@ -111,6 +111,9 @@ namespace PNMS.Web.API.Controllers
                             {
                                 db.NewsCategories.Add(ctg);
                                 db.SaveChanges();
+                                return Request.CreateResponse(HttpStatusCode.Created, new Dictionary<string, object>() {
+                                    { "Message", "Category added succefully" }, { "category", ctg}
+                                }); ;
                             }
                             catch
                             {
@@ -118,12 +121,9 @@ namespace PNMS.Web.API.Controllers
                                 dict.Add("error", msg);
                                 return Request.CreateResponse(HttpStatusCode.InternalServerError, dict);
                             }
-
                         }
                     }
-
-                    var message1 = string.Format("Category added succefully!");
-                    return Request.CreateErrorResponse(HttpStatusCode.Created, message1); ;
+                    
                 }
                 var res = string.Format("Please Upload a image.");
                 dict.Add("error", res);
@@ -214,6 +214,9 @@ namespace PNMS.Web.API.Controllers
             {
                 Category.Name = name.ToLower();
                 db.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created, new Dictionary<string, object>() {
+                    { "Message", "Category updated succefully!" }, { "category", Category}
+                }); ;
             }
             catch
             {
@@ -221,8 +224,6 @@ namespace PNMS.Web.API.Controllers
                 dict.Add("error", msg);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, dict);
             }
-            var message1 = string.Format("Category updated succefully!");
-            return Request.CreateErrorResponse(HttpStatusCode.Created, message1); ;
         }
 
         // DELETE: api/Category/5

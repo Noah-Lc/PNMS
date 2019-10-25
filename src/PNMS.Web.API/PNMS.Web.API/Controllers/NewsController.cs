@@ -184,7 +184,10 @@ namespace PNMS.Web.API.Controllers
                 //Save it to Database
                 db.NewsItems.Add(news);
                 db.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.OK, $"{news.Name} added succefully!");
+                return Request.CreateResponse(HttpStatusCode.Created, new Dictionary<string, object>()
+                {
+                    { "Message", $"{news.Name} added succefully!" }, { "item", news}
+                });
             }
             catch
             {
@@ -227,8 +230,10 @@ namespace PNMS.Web.API.Controllers
                 news.LinkUrl = linkUrl.Replace(" ", "_").ToLower();
                 news.NewsCategoryId = newsCategory.Id;
                 db.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.OK, $"{news.Name} updated succefully!");
-
+                return Request.CreateResponse(HttpStatusCode.Created, new Dictionary<string, object>()
+                {
+                    { "Message",  $"{news.Name} updated succefully!" }, { "item", news}
+                });
             }
             catch
             {
