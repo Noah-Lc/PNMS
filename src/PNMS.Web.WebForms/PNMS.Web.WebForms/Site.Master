@@ -61,12 +61,17 @@
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
 
             </asp:ContentPlaceHolder>
-
             <hr />
             <footer>
                 <p>&copy; <%: DateTime.Now.Year %> - PNMS</p>
             </footer>
         </div>
-
+        <script src="Scripts/loadingOverlay.js"></script>
+        <script>
+            var spinHandle = loadingOverlay().activate();
+            $(document).ajaxComplete(function () {
+                loadingOverlay().cancel(spinHandle);;
+            });
+        </script>
 </body>
 </html>
