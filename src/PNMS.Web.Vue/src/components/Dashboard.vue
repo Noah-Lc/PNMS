@@ -281,8 +281,6 @@ export default {
                 this.item.date = moment(String(item.Date)).format('YYYY-MM-DD');
                 this.item.link = item.LinkUrl;
                 this.item.new = false;
-                
-                console.log(this.item.date);
             }
         },
         updateItem: function () {
@@ -308,7 +306,6 @@ export default {
             const { dispatch } = this.$store;
             if (id) {
                 dispatch('items/delete', { id });
-                refreshData();
             }
         },
         editCategory: function (id) {
@@ -331,7 +328,6 @@ export default {
                     dispatch('categories/update', { id, name, image });
                     this.$store.dispatch('categories/getAll');
                     $('#modalCategories').modal('toggle');
-                    refreshData();
                 }
             }
         },
@@ -348,7 +344,6 @@ export default {
             if (id) {
                 dispatch('categories/delete', { id });
                 this.$store.dispatch('categories/getAll');
-                refreshData();
             }
         },
         createItem(){ 
@@ -359,7 +354,6 @@ export default {
             if (name && text && date && link) {
                 dispatch('items/create', { name, text, date, link });
                 $('#modalItems').modal('toggle');
-                refreshData();
             }
         },
         createCategory(){
@@ -370,18 +364,12 @@ export default {
             if (name, image) {
                 dispatch('categories/create', { name, image });
                 $('#modalCategory').modal('toggle');
-                refreshData();
             }
         },
         clearModal(){
             this.category = {name: '', image: '', submitted: false, new: true};
             this.item = {name: '', text: '', date: '', link: '', submitted: false, new: true};
             this.fileName = '';
-        },
-        refreshData()
-        {
-            this.$store.dispatch('categories/getAll');
-            this.$store.dispatch('items/getAll');
         }
     },
     created () {

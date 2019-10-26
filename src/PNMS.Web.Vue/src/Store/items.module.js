@@ -17,7 +17,7 @@ export const items = {
             itemService.create(name, text, date, link, 1)
                 .then(
                     item => {
-                        //commit('AddItemSuccess', item);
+                        commit('AddItemSuccess', item);
                     },
                     error => {
                         dispatch('alert/error', error, { root: true });
@@ -59,6 +59,7 @@ export const items = {
             state.all = { error };
         },
         AddItemSuccess(state, item) {
+            console.log(item);
             state.all.items.push(item);
         },
         UpdateItemmSuccess(state, item) {
