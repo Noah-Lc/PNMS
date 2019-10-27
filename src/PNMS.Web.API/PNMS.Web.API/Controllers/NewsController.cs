@@ -167,8 +167,8 @@ namespace PNMS.Web.API.Controllers
             if(newsCategory == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your data, no category was found!");
             //Check if the url is valid and contains no special char
-            if (!Utilities.URL.Validator.HasSpecialChars(linkUrl))
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Please check the link your provided, no special characters are allowded!");
+            //if (!Utilities.URL.Validator.HasSpecialChars(linkUrl))
+            //    return Request.CreateResponse(HttpStatusCode.NotFound, "Please check the link your provided, no special characters are allowded!");
             //Create new item
             NewsItem news = new NewsItem()
             {
@@ -229,8 +229,8 @@ namespace PNMS.Web.API.Controllers
             if (newsCategory == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Please check your data, no category was found!");
             //Verify if the link is valid
-            if (!Utilities.URL.Validator.HasSpecialChars(linkUrl))
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Please check the link your provided, no special characters are allowded!");
+            //if (!Utilities.URL.Validator.HasSpecialChars(linkUrl))
+            //    return Request.CreateResponse(HttpStatusCode.NotFound, "Please check the link your provided, no special characters are allowded!");
             try
             {
                 news.Date = date;
