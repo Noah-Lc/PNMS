@@ -184,7 +184,19 @@ namespace PNMS.Web.API.Controllers
                 //Save it to Database
                 db.NewsItems.Add(news);
                 db.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.Created, news);
+                return Request.CreateResponse(HttpStatusCode.Created, new News()
+                {
+                    CategoryID = news.NewsCategoryId,
+                    CategoryName = news.NewsCategory.Name,
+                    Date = news.Date,
+                    Name = news.Name,
+                    Id = news.Id,
+                    LinkUrl = news.LinkUrl,
+                    LongDate = news.Date.Value.ToLongDateString(),
+                    NormalDate = news.Date.Value.ToShortDateString(),
+                    ShotDate = news.Date.Value.ToShortDateString(),
+                    Text = news.Text
+                });
             }
             catch
             {
@@ -227,7 +239,19 @@ namespace PNMS.Web.API.Controllers
                 news.LinkUrl = linkUrl.Replace(" ", "_").ToLower();
                 news.NewsCategoryId = newsCategory.Id;
                 db.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.Created, news);
+                return Request.CreateResponse(HttpStatusCode.Created, new News()
+                {
+                    CategoryID = news.NewsCategoryId,
+                    CategoryName = news.NewsCategory.Name,
+                    Date = news.Date,
+                    Name = news.Name,
+                    Id = news.Id,
+                    LinkUrl = news.LinkUrl,
+                    LongDate = news.Date.Value.ToLongDateString(),
+                    NormalDate = news.Date.Value.ToShortDateString(),
+                    ShotDate = news.Date.Value.ToShortDateString(),
+                    Text = news.Text
+                });
             }
             catch
             {

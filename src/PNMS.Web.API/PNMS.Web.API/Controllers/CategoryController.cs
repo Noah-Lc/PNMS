@@ -112,7 +112,11 @@ namespace PNMS.Web.API.Controllers
                                 db.NewsCategories.Add(ctg);
                                 db.SaveChanges();
                                 return Request.CreateResponse(HttpStatusCode.Created, new Dictionary<string, object>() {
-                                    { "Message", "Category added succefully" }, { "category", ctg}
+                                    { "Message", "Category added succefully" }, { "category", new Category{
+                                        Id = ctg.Id,
+                                        ImageUrl = ctg.Image,
+                                        Name = ctg.Name
+                                    } }
                                 }); ;
                             }
                             catch
@@ -215,7 +219,11 @@ namespace PNMS.Web.API.Controllers
                 Category.Name = name.ToLower();
                 db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.Created, new Dictionary<string, object>() {
-                    { "Message", "Category updated succefully!" }, { "category", Category}
+                    { "Message", "Category updated succefully!" }, { "category",  new Category{
+                        Id = Category.Id,
+                        ImageUrl = Category.Image,
+                        Name = Category.Name
+                    }}
                 }); ;
             }
             catch
