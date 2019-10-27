@@ -63,14 +63,18 @@
                                             <tbody>
                                                 <tr v-for="item in items.items" :key="item.Id">
                                                     <th scope="row">{{ item.Id }}</th>
-                                                    <td>{{ item.Name }}</td>
-                                                    <td>{{ item.Text }}</td>
+                                                    <td>{{ showString(item.Name, 15) }}</td>
+                                                    <td>{{ showString(item.Text, 20) }}</td>
                                                     <td>{{ item.CategoryName }}</td>
-                                                    <td>{{ item.Date }}</td>
+                                                    <td>{{ formatDate(item.Date) }}</td>
                                                     <td><a href="#">{{ item.LinkUrl }}</a></td>
                                                     <td>
-                                                        <button class="mr-3 btn btn-danger" v-on:click="deleteItem(item.Id)" data-toggle="modal" data-target="#confirmationItem"></button>
-                                                        <button class="btn btn-info" v-on:click="editItem(item.Id)" data-toggle="modal" data-target="#modalItem"></button>
+                                                        <button class="mr-3 btn btn-danger p-1" v-on:click="deleteItem(item.Id)" data-toggle="modal" data-target="#confirmationItem">
+                                                            <img src="../../public/src/img/delete.svg" alt="delete" class="icon-btn">
+                                                        </button>
+                                                        <button class="btn btn-info p-1" v-on:click="editItem(item.Id)" data-toggle="modal" data-target="#modalItem">
+                                                            <img src="../../public/src/img/update.svg" alt="update" class="icon-btn">
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -102,10 +106,14 @@
                                                 <tr v-for="category in categories.items" :key="category.Id">
                                                     <th scope="row">{{ category.Id }}</th>
                                                     <td>{{ category.Name }}</td>
-                                                    <td>{{ category.ImageUrl }}</td>
+                                                    <td>{{ showString(category.ImageUrl, 20) }}</td>
                                                     <td>
-                                                        <button class="mr-3 btn btn-danger" v-on:click="deleteCategory(category.Id)" data-toggle="modal" data-target="#confirmationCategory"></button>
-                                                        <button class="btn btn-info"  v-on:click="editCategory(category.Id)" data-toggle="modal" data-target="#modalCategory"></button>
+                                                        <button class="mr-3 btn btn-danger p-1" v-on:click="deleteCategory(category.Id)" data-toggle="modal" data-target="#confirmationCategory">
+                                                            <img src="../../public/src/img/delete.svg" alt="delete" class="icon-btn">
+                                                        </button>
+                                                        <button class="btn btn-info p-1"  v-on:click="editCategory(category.Id)" data-toggle="modal" data-target="#modalCategory">
+                                                            <img src="../../public/src/img/update.svg" alt="update" class="icon-btn">
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -170,10 +178,6 @@
                                             <input type="text" v-model="item.name" placeholder="Name Category" class="form-control" :class="{ 'is-invalid': item.submitted && !item.name }">
                                         </div>
                                         <div class="form-group">
-                                            <label>Text</label>
-                                            <input type="text" v-model="item.text" placeholder="Text" class="form-control" :class="{ 'is-invalid': item.submitted && !item.text }">
-                                        </div>
-                                        <div class="form-group">
                                             <label>Category</label>
                                             <select class="form-control" v-model="item.categoryId">
                                                 <option disabled value>Choose Category</option>
@@ -183,6 +187,10 @@
                                         <div class="form-group">
                                             <label>Date</label>
                                             <input type="date" v-model="item.date" placeholder="Date" class="form-control" :class="{ 'is-invalid': item.submitted && !item.date }">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Text</label>
+                                            <textarea type="text" v-model="item.text" placeholder="Text" class="form-control" :class="{ 'is-invalid': item.submitted && !item.text }"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label>Link</label>
@@ -281,6 +289,12 @@ export default {
             this.category.image = event.target.files[0]
             this.fileName = this.category.image.name;
         },
+        showString(text, max){
+            return text.length > max ? text.substring(0,max)+".." : text;
+        },
+        formatDate(date){
+            return moment(String(date)).format('MM/DD/YYYY');
+        },
         editItem: function (id) {
             // `id` is the id of Item
             if (id) {
@@ -299,12 +313,13 @@ export default {
             // `id` is the id of Item
             if (this.item.id) {
                 this.category.submitted = true;
-                const { id, name, text, date, link } = this.item;
+                const { id, name, text, date, link, categoryId } = this.item;
                 const { dispatch } = this.$store;
                 
-                if (name && text && date && link) {
-                    dispatch('items/update', { id, name, text, date, link });
-                    $('#modalItems').modal('toggle');
+                if (name && text && date && link, categoryId) {
+                    dispatch('items/update', { id, name, text, date, link, categoryId });
+                    $('#modalItem').modal('toggle');
+                    this.clearModal();
                 }
             }
         },
@@ -339,7 +354,8 @@ export default {
                 
                 if (name) {
                     dispatch('categories/update', { id, name, image });
-                    $('#modalCategories').modal('toggle');
+                    $('#modalCategory').modal('toggle');
+                    this.clearModal();
                 }
             }
         },
@@ -365,7 +381,7 @@ export default {
             
             if (name && text && date && link && categoryId) {
                 dispatch('items/create', { name, text, date, link, categoryId });
-                $('#modalItems').modal('toggle');
+                $('#modalItem').modal('toggle');
             }
         },
         createCategory(){
@@ -380,7 +396,7 @@ export default {
         },
         clearModal(){
             this.category = {name: '', image: '', submitted: false, new: true};
-            this.item = {name: '', text: '', date: '', link: '', submitted: false, new: true};
+            this.item = {name: '', text: '', date: '', link: '', categoryId: '', submitted: false, new: true};
             this.fileName = '';
         }
     },
@@ -449,5 +465,11 @@ export default {
     display: inline-block;
 }
 
-
+.icon-btn{
+    width: 25px;
+}
+textarea{
+    height: 240px !important;
+    resize: none;
+}
 </style>

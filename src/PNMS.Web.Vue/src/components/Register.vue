@@ -11,26 +11,30 @@
              <div v-if="alert.message" class="my-2" :class="`alert ${alert.type}`">{{alert.message}}</div>
             <form @submit.prevent="handleSubmit" class="text-left form-validate">
               <div class="form-group-material">
-                <input id="register-name" type="text" name="registerName" placeholder="Full Name"  v-model="name" class="input-material" :class="{ 'is-invalid': submitted && !validateName(name) }">
+                <input id="register-name" type="text" name="registerName" placeholder="Full Name" v-model="name" class="input-material" :class="{ 'is-invalid': submitted && !validateName(name) }">
               </div>
               <div class="form-group-material">
-                <input id="register-username" type="text" name="registerUsername" placeholder="Username"  v-model="username" class="input-material" :class="{ 'is-invalid': submitted && !validateUsername(username) }">
+                <input id="register-username" type="text" name="registerUsername" placeholder="Username" v-model="username" class="input-material" :class="{ 'is-invalid': submitted && !validateUsername(username) }">
               </div>
               <div class="form-group-material">
-                <input id="register-email" type="text" name="registerEmail" placeholder="Email Address"  v-model="email" class="input-material" :class="{ 'is-invalid': submitted && !validateEmail(email) }">
+                <input id="register-email" type="text" name="registerEmail" placeholder="Email Address" v-model="email" class="input-material" :class="{ 'is-invalid': submitted && !validateEmail(email) }">
               </div>
               <div class="form-group-material">
-                <input id="register-password" type="password" name="registerPassword" placeholder="Password"  v-model="password" class="input-material" :class="{ 'is-invalid': submitted && !validatePassword() }">
+                <input id="register-password" type="password" name="registerPassword" placeholder="Password" v-model="password" class="input-material" :class="{ 'is-invalid': submitted && !validatePassword() }">
               </div>
               <div class="form-group-material">
-                <input id="register-password" type="password" name="registerPassword" placeholder="Confirm Password"  v-model="confirmPassword" class="input-material" :class="{ 'is-invalid': submitted && !validatePassword() }">
+                <input id="register-password" type="password" name="registerPassword" placeholder="Confirm Password" v-model="confirmPassword" class="input-material" :class="{ 'is-invalid': submitted && !validatePassword() }">
               </div>
               <div class="form-group terms-conditions text-center">
                 <input id="register-agree" name="registerAgree" type="checkbox" value="1" v-model="agree" class="form-control-custom" :class="{ 'is-invalid': submitted && !agree }">
                 <label for="register-agree">I agree with the terms and policy</label>
               </div>
               <div class="form-group text-center">
-                <input id="register" type="submit" value="Register" class="btn btn-primary">
+
+                <button id="register" type="submit" :disabled="registerIn" class="btn btn-primary">
+                  Login <span v-show="registerIn" class="loader"></span>
+                </button>
+
               </div>
             </form><small>Already have an account? </small><a href="/login" class="signup">Login</a>
           </div>
@@ -52,6 +56,9 @@ export default {
         }
     },
     computed: {
+       registerIn () {
+            return this.$store.state.authentication.status.registerIn;
+        },
         alert () {
             return this.$store.state.alert
         },
@@ -87,7 +94,7 @@ export default {
           return re.test(username);
         },
         validateName(name){
-          var re = /^[a-z]([-']?[a-z]+)*( [a-z]([-']?[a-z]+)*)+$/;
+          var re = /^[a-zA-Z]([-']?[a-zA-Z]+)*( [a-zA-Z]([-']?[a-zA-Z]+)*)+$/;
           return re.test(name) && name.length > 6;
         }
     },

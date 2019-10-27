@@ -23,9 +23,10 @@ function create(name, ImageUrl) {
     };
 
     return fetch(`${config.apiUrl}/api/Category`, requestOptions)
-        .then(user => {
-            return user;
-    });
+            .then(handleResponse)
+            .then(category => {
+                    return category;
+            });
 }
 
 function update(id, name, ImageUrl) {
@@ -43,8 +44,9 @@ function update(id, name, ImageUrl) {
     };
 
     return fetch(`${config.apiUrl}/api/Category`, requestOptions)
-        .then(user => {
-            return user;
+        .then(handleResponse)
+        .then(category => {
+            return category;
     });
 }
 

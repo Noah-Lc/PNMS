@@ -26,11 +26,11 @@ export const items = {
                     }
                 );
         },
-        update({ dispatch, commit }, { id, name, text, date, link }) {
-            itemService.update(id, name, text, date, link, 1)
+        update({ dispatch, commit }, { id, name, text, date, link, categoryId }) {
+            itemService.update(id, name, text, date, link, categoryId)
                 .then(
                     item => {
-                        commit('updateItemSuccess', { id: id, name: name, text: text, date: date, link: link, categoryid: 1 })
+                        commit('updateItemSuccess', item)
                     },
                     error => {
                         dispatch('alert/error', error, { root: true });
@@ -64,13 +64,15 @@ export const items = {
         },
         updateItemSuccess(state, item) {
             const updatedItems = [...state.all.items];
-            const indexItem = state.all.items.findIndex(i => item.id === i.Id);
-
+            const indexItem = state.all.items.findIndex(i => item.Id === i.Id);
+            
             //Update item data
-            updatedItems[indexItem].Name = item.name;
-            updatedItems[indexItem].Text = item.text;
-            updatedItems[indexItem].Date = item.date;
-            updatedItems[indexItem].LinkUrl = item.link;
+            updatedItems[indexItem].Name = item.Name;
+            updatedItems[indexItem].Text = item.Text;
+            updatedItems[indexItem].Date = item.Date;
+            updatedItems[indexItem].LinkUrl = item.LinkUrl;
+            updatedItems[indexItem].CategoryID = item.CategoryID;
+            updatedItems[indexItem].CategoryName = item.CategoryName;
 
             state.all = { items: updatedItems };
         },

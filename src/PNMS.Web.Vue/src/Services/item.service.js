@@ -25,9 +25,10 @@ function create(name, text, date, link, categoryid) {
     };
 
     return fetch(`${config.apiUrl}/api/News`, requestOptions)
+        .then(handleResponse)
         .then(item => {
             return item;
-    });
+        });
 }
 
 function update(id, name, text, date, link, categoryid) {
@@ -46,9 +47,10 @@ function update(id, name, text, date, link, categoryid) {
     };
 
     return fetch(`${config.apiUrl}/api/News`, requestOptions)
+        .then(handleResponse)
         .then(item => {
-            return item;
-    });
+                return item;
+        });
 }
 
 

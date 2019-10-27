@@ -17,8 +17,8 @@ export const categories = {
         create({ dispatch, commit }, { name, image }) {
             categoryService.create(name, image)
                 .then(
-                    category => {
-                        commit('createSuccess', category);
+                    res => {
+                        commit('createSuccess', res.category);
                     },
                     error => {
                         commit('createFailure', error);
@@ -29,8 +29,8 @@ export const categories = {
         update({ dispatch, commit }, { id, name, image }) {
             categoryService.update(id, name, image)
                 .then(
-                    category => {
-                        commit('updateSuccess', { id, name, image });
+                    res => {
+                        commit('updateSuccess', res.category);
                     },
                     error => {
                         alert(error);
@@ -66,12 +66,11 @@ export const categories = {
         },
         updateSuccess(state, category) {
             const updatedCategories = [...state.all.items];
-            const indexCategory = state.all.items.findIndex(i => category.id === i.Id);
+            const indexCategory = state.all.items.findIndex(i => category.Id === i.Id);
 
             //Update data
-            updatedCategories[indexCategory].Name = category.name;
-            if(category.image)
-                updatedCategories[indexCategory].ImageUrl = category.image;
+            updatedCategories[indexCategory].Name = category.Name;
+            updatedCategories[indexCategory].ImageUrl = category.ImageUrl;
 
             state.all = { items: updatedCategories };
         },

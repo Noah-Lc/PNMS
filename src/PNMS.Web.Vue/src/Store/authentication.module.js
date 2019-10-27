@@ -59,9 +59,11 @@ export const authentication = {
             state.user = null;
         },
         registerRequest(state, user) {
+            state.status = { registerIn: true };
             state.user = user;
         },
         registerSuccess(state, user) {
+            state.status = { registerIn: true };
             state.user = user;
         },
         registerFailure(state) {
