@@ -67,7 +67,7 @@
                                                     <td>{{ item.Date }}</td>
                                                     <td><a href="#">{{ item.LinkUrl }}</a></td>
                                                     <td>
-                                                        <button class="mr-3 btn btn-danger" v-on:click="deleteItem(item.Id)" data-toggle="modal" data-target="#confirmationDelete"></button>
+                                                        <button class="mr-3 btn btn-danger" v-on:click="deleteItem(item.Id)" data-toggle="modal" data-target="#confirmationItem"></button>
                                                         <button class="btn btn-info" v-on:click="editItem(item.Id)" data-toggle="modal" data-target="#modalItem"></button>
                                                     </td>
                                                 </tr>
@@ -113,7 +113,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal" id="confirmationDelete" tabindex="-1" role="dialog">
+                    <div class="modal" id="confirmationItem" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -305,7 +305,8 @@ export default {
             const id = this.item.id;
             const { dispatch } = this.$store;
             if (id) {
-                dispatch('items/delete', { id });
+                dispatch('items/delete', id);
+                $('#confirmationItem').modal('toggle');
             }
         },
         editCategory: function (id) {
@@ -326,7 +327,6 @@ export default {
                 
                 if (name) {
                     dispatch('categories/update', { id, name, image });
-                    this.$store.dispatch('categories/getAll');
                     $('#modalCategories').modal('toggle');
                 }
             }
@@ -342,8 +342,8 @@ export default {
             const id = this.category.id;
             const { dispatch } = this.$store;
             if (id) {
-                dispatch('categories/delete', { id });
-                this.$store.dispatch('categories/getAll');
+                dispatch('categories/delete', id);
+                $('#confirmationCategory').modal('toggle');
             }
         },
         createItem(){ 

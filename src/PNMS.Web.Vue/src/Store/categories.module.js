@@ -30,18 +30,20 @@ export const categories = {
             categoryService.update(id, name, image)
                 .then(
                     category => {
-                        commit('createSuccess', category);
+                        commit('updateSuccess', { id, name, image });
                     },
                     error => {
+                        alert(error);
                         commit('createFailure', error);
                         dispatch('alert/error', error, { root: true });
                     }
                 );
         },
-        delete({ dispatch, commit }, { id }) {
+        delete({ dispatch, commit }, id) {
             categoryService.DeleteByID(id)
                 .then(
                     category => {
+                        commit('deleteSuccess', id);
                     },
                     error => {
                         dispatch('alert/error', error, { root: true });
@@ -60,12 +62,26 @@ export const categories = {
             state.all = { error };
         },
         createSuccess(state, category) {
-            state.status = { created: true };
-            state.category = category;
+            state.all.items.push(category);
         },
-        createFailure(state) {
-            state.status = {};
-            state.category = null;
+        updateSuccess(state, category) {
+            const updatedCategories = [...state.all.items];
+            const indexCategory = state.all.items.findIndex(i => category.id === i.Id);
+
+            //Update data
+            updatedCategories[indexCategory].Name = category.name;
+            if(category.image)
+                updatedCategories[indexCategory].ImageUrl = category.image;
+
+            state.all = { items: updatedCategories };
         },
+        deleteSuccess(state, id) {
+            //Remove category by ID
+            const newLists = state.all.items.filter(x => {
+                return x.Id != id;
+            })
+
+            state.all = { items: newLists };
+        }
     }
 }

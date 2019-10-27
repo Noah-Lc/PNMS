@@ -17,7 +17,7 @@ export const items = {
             itemService.create(name, text, date, link, 1)
                 .then(
                     item => {
-                        commit('AddItemSuccess', item);
+                        commit('addItemSuccess', item);
                     },
                     error => {
                         dispatch('alert/error', error, { root: true });
@@ -28,19 +28,18 @@ export const items = {
             itemService.update(id, name, text, date, link, 1)
                 .then(
                     item => {
-                        //commit('UpdateItemmSuccess', {id: id, name: name, text: text, date: date, link: link,categoryid: 1})
+                        commit('updateItemSuccess', { id: id, name: name, text: text, date: date, link: link, categoryid: 1 })
                     },
                     error => {
                         dispatch('alert/error', error, { root: true });
                     }
                 );
         },
-        delete({ dispatch, commit }, { id }) {
-            commit('');
+        delete({ dispatch, commit }, id) {
             itemService.deleteByID(id)
                 .then(
                     item => {
-                        //commit('DeleteItemSuccess', item)
+                        commit('deleteItemSuccess', id)
                     },
                     error => {
                         dispatch('alert/error', error, { root: true });
@@ -58,20 +57,30 @@ export const items = {
         getAllFailure(state, error) {
             state.all = { error };
         },
-        AddItemSuccess(state, item) {
-            console.log(item);
+        addItemSuccess(state, item) {
             state.all.items.push(item);
         },
-        UpdateItemmSuccess(state, item) {
+        updateItemSuccess(state, item) {
             const updatedItems = [...state.all.items];
-            const indexItem = state.all.items.findIndex(i => item.id === i.id);
-            updatedItems[indexItem] = item;
+            const indexItem = state.all.items.findIndex(i => item.id === i.Id);
+
+            //Update item data
+            updatedItems[indexItem].Name = item.name;
+            updatedItems[indexItem].Text = item.text;
+            updatedItems[indexItem].Date = item.date;
+            updatedItems[indexItem].LinkUrl = item.link;
+
             state.all = { items: updatedItems };
             console.log(indexItem);
 
         },
-        DeleteItemSuccess(state, item) {
-            state.all = { update: item };
+        deleteItemSuccess(state, id) {
+            //Delete item by ID
+            const newLists = state.all.items.filter(x => {
+                return x.Id != id;
+            })
+
+            state.all = { items: newLists };
         }
     }
 }
