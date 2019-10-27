@@ -10,6 +10,21 @@ export const authentication = {
     namespaced: true,
     state: initialState,
     actions: {
+        register({ dispatch, commit }, { username, password, firstname, lastname, email }) {
+            commit('registerRequest', { username });
+
+            userService.register(username, password, firstname, lastname, email)
+                .then(
+                    user => {
+                        commit('registerSuccess', user);
+                        router.push('/Login');
+                    },
+                    error => {
+                        commit('registerFailure', error);
+                        dispatch('alert/error', error, { root: true });
+                    }
+                );
+        },
         login({ dispatch, commit }, { username, password }) {
             commit('loginRequest', { username });
 
@@ -40,6 +55,16 @@ export const authentication = {
             state.user = user;
         },
         loginFailure(state) {
+            state.status = {};
+            state.user = null;
+        },
+        registerRequest(state, user) {
+            state.user = user;
+        },
+        registerSuccess(state, user) {
+            state.user = user;
+        },
+        registerFailure(state) {
             state.status = {};
             state.user = null;
         },

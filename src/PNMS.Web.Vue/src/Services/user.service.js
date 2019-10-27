@@ -3,8 +3,38 @@ import { authHeader } from '../Helpers';
 
 export const userService = {
     login,
-    logout
+    logout,
+    register
 };
+
+function register(username, password, firstname, lastname, email) {
+    var details = {
+        'username': username,
+        'password': password,
+        'firstname': firstname,
+        'lastname': lastname,
+        'email': email
+    };
+    
+    var formBody = [];
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: formBody
+    };
+
+    return fetch(`${config.apiUrl}/api/user`, requestOptions)
+        .then(res => {
+            return res;
+    });
+}
 
 function login(username, password) {
     var details = {
@@ -33,7 +63,6 @@ function login(username, password) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user));
             }
-
             return user;
         });
 }

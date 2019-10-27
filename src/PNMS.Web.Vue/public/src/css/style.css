@@ -1389,6 +1389,10 @@ input.form-control-custom {
   width: 1px;
 }
 
+input.form-control-custom.is-invalid + label::before {
+  border: 1px solid #dc3545;
+}
+
 input.form-control-custom:checked + label::before {
   background: #33b35a !important;
 }
@@ -1453,21 +1457,6 @@ input.form-control-custom + label::before {
   left: 0;
   -webkit-transition: all 0.1s;
   transition: all 0.1s;
-  cursor: pointer;
-}
-
-input.form-control-custom + label::after {
-  content: '\f00c';
-  display: block;
-  font-family: 'FontAwesome';
-  font-size: 8px;
-  color: #fff;
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  -webkit-transition: all 0.1s;
-  transition: all 0.1s;
-  opacity: 0;
   cursor: pointer;
 }
 

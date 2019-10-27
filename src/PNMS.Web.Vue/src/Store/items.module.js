@@ -7,14 +7,16 @@ export const items = {
     },
     actions: {
         getAll({ commit }) {
+            commit('getAllRequest', items);
             itemService.getAll()
                 .then(
+                    
                     items => commit('getAllSuccess', items),
                     error => commit('getAllFailure', error)
                 );
         },
-        create({ dispatch, commit }, { name, text, date, link }) {
-            itemService.create(name, text, date, link, 1)
+        create({ dispatch, commit }, { name, text, date, link, categoryId }) {
+            itemService.create(name, text, date, link, Number(categoryId))
                 .then(
                     item => {
                         commit('addItemSuccess', item);
@@ -71,8 +73,6 @@ export const items = {
             updatedItems[indexItem].LinkUrl = item.link;
 
             state.all = { items: updatedItems };
-            console.log(indexItem);
-
         },
         deleteItemSuccess(state, id) {
             //Delete item by ID

@@ -11,10 +11,10 @@
                     <div v-if="alert.message" class="my-2" :class="`alert ${alert.type}`">{{alert.message}}</div>
                     <form @submit.prevent="handleSubmit" class="text-left form-validate">
                         <div class="form-group-material">
-                            <input id="login-username" v-model="username" placeholder="Username" type="text" name="loginUsername" :class="{ 'is-invalid': submitted && !username }" class="input-material">
+                            <input id="login-username" v-model="username" placeholder="Username" type="text" name="loginUsername" :class="{ 'is-invalid': submitted && !validateUsername(username) }" class="input-material">
                         </div>
                         <div class="form-group-material">
-                            <input id="login-password" v-model="password" placeholder="Password" type="password" name="loginPassword" class="input-material"  :class="{ 'is-invalid': submitted && !password }">
+                            <input id="login-password" v-model="password" placeholder="Password" type="password" name="loginPassword" class="input-material"  :class="{ 'is-invalid': submitted && !validatePassword(password) }">
                         </div>
                         <div class="form-group text-center">
                             <button id="login" type="submit" :disabled="loggingIn" class="btn btn-primary">
@@ -57,6 +57,14 @@ export default {
             if (username && password) {
                 dispatch('authentication/login', { username, password });
             }
+        },
+        validateUsername(usernname){
+          var re = /^[0-9a-zA-Z_.-]+$/;
+          return re.test(usernname);
+        },
+        validatePassword(){
+          const { password } = this;
+          return password.length >= 6;
         }
     },
     watch:{

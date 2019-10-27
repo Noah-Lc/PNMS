@@ -45,15 +45,16 @@
                                     <button class="mr-3 btn btn-primary float-right" data-toggle="modal" data-target="#modalItem">New Item</button>
                                 </div>
                                 <div class="card-body">
-                                    <div class="table-responsive">
+                                    <div class="table-responsive text-center">
                                         <em v-if="items.loading">Loading items...</em>
-                                        <span v-if="items.error" class="text-danger">ERROR: {{items.error}}</span>
+                                        <span v-if="items.error" class="text-danger">ERROR: Failed to fetch</span>
                                         <table class="table table-striped" v-if="items.items">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Name</th>
                                                     <th>Text</th>
+                                                    <th>Category</th>
                                                     <th>Date</th>
                                                     <th>Link url</th>
                                                     <th>Action</th>
@@ -64,6 +65,7 @@
                                                     <th scope="row">{{ item.Id }}</th>
                                                     <td>{{ item.Name }}</td>
                                                     <td>{{ item.Text }}</td>
+                                                    <td>{{ item.CategoryName }}</td>
                                                     <td>{{ item.Date }}</td>
                                                     <td><a href="#">{{ item.LinkUrl }}</a></td>
                                                     <td>
@@ -84,9 +86,9 @@
                                     <button class="mr-3 btn btn-primary float-right" data-toggle="modal" data-target="#modalCategory">New Category</button>
                                 </div>
                                 <div class="card-body">
-                                    <div class="table-responsive">
+                                    <div class="table-responsive text-center">
                                         <em v-if="categories.loading">Loading categories...</em>
-                                        <span v-if="categories.error" class="text-danger">ERROR: {{categories.error}}</span>
+                                        <span v-if="categories.error" class="text-danger">ERROR: Failed to fetch</span>
                                         <table class="table table-striped" v-if="categories.items">
                                             <thead>
                                                 <tr>
@@ -172,6 +174,13 @@
                                             <input type="text" v-model="item.text" placeholder="Text" class="form-control" :class="{ 'is-invalid': item.submitted && !item.text }">
                                         </div>
                                         <div class="form-group">
+                                            <label>Category</label>
+                                            <select class="form-control" v-model="item.categoryId">
+                                                <option disabled value>Choose Category</option>
+                                                <option v-for="category in categories.items" :key="category.Id" v-bind:value="category.Id" >{{ category.Name }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label>Date</label>
                                             <input type="date" v-model="item.date" placeholder="Date" class="form-control" :class="{ 'is-invalid': item.submitted && !item.date }">
                                         </div>
@@ -242,6 +251,7 @@ export default {
                 text: '',
                 date: '',
                 link: '',
+                categoryId: '',
                 submitted: false,
                 new: true
             },
@@ -275,9 +285,11 @@ export default {
             // `id` is the id of Item
             if (id) {
                 let item = this.items.items.find(item => item.Id === id);
+                
                 this.item.id = item.Id;
                 this.item.name = item.Name;
                 this.item.text = item.Text;
+                this.item.categoryId = item.CategoryID;
                 this.item.date = moment(String(item.Date)).format('YYYY-MM-DD');
                 this.item.link = item.LinkUrl;
                 this.item.new = false;
@@ -348,11 +360,11 @@ export default {
         },
         createItem(){ 
             this.category.submitted = true;
-            const { name, text, date, link } = this.item;
+            const { name, text, date, link, categoryId } = this.item;
             const { dispatch } = this.$store;
             
-            if (name && text && date && link) {
-                dispatch('items/create', { name, text, date, link });
+            if (name && text && date && link && categoryId) {
+                dispatch('items/create', { name, text, date, link, categoryId });
                 $('#modalItems').modal('toggle');
             }
         },
