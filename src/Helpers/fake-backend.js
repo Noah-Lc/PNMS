@@ -1,7 +1,6 @@
 export function configureFakeBackend() {
     let users = [
-        { id: 2, username: 'admin', password: 'admin', fullname: 'admin' },
-        { id: 1, username: 'test', password: 'test', fullname: 'Test' }
+        { id: 2, username: 'admin', password: 'admin', fullname: 'admin' }
     ];
     let categories = [
         { id: 1, name: 'test01', image: 'test01' }, 
@@ -22,7 +21,6 @@ export function configureFakeBackend() {
                 // authenticate
                 if (url.endsWith('/api/authentification') && opts.method === 'POST') {
                     // get parameters from post request
-                    console.log(opts.body);
                     let params = JSON.parse(opts.body);
 
                     // find if any user matches login credentials
@@ -45,6 +43,34 @@ export function configureFakeBackend() {
                         reject('Username or password is incorrect');
                     }
 
+                    return;
+                }
+
+                // register new fake user
+                if (url.endsWith('/api/user') && opts.method === 'POST') {
+                    // get parameters from post request
+                    let params = JSON.parse(opts.body);
+
+                    // find if any user matches alredy exists
+                    let filteredUsers = users.filter(user => {
+                        return user.username === params.username;
+                    });
+                    if (filteredUsers.length == 0) {
+                        // if no user exists alredy push a new user
+                        let user = params;
+                        let newUser = {
+                            id: Number(users[users.length - 1].id) + 1,
+                            username: user.username,
+                            password: user.password,
+                            fullname: user.fullname
+                        };
+                        users.push(newUser);
+                        console.log(users);
+                        resolve({ ok: true });
+                    } else {
+                        // else return error
+                        reject('Username is already exists');
+                    }
                     return;
                 }
 

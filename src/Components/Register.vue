@@ -11,13 +11,10 @@
              <div v-if="alert.message" class="my-2" :class="`alert ${alert.type}`">{{alert.message}}</div>
             <form @submit.prevent="handleSubmit" class="text-left form-validate">
               <div class="form-group-material">
-                <input id="register-name" type="text" name="registerName" placeholder="Full Name" v-model="name" class="input-material" :class="{ 'is-invalid': submitted && !validateName(name) }">
+                <input id="register-name" type="text" name="registerName" placeholder="Full name" v-model="fullname" class="input-material" :class="{ 'is-invalid': submitted && !validateName(fullname) }">
               </div>
               <div class="form-group-material">
                 <input id="register-username" type="text" name="registerUsername" placeholder="Username" v-model="username" class="input-material" :class="{ 'is-invalid': submitted && !validateUsername(username) }">
-              </div>
-              <div class="form-group-material">
-                <input id="register-email" type="text" name="registerEmail" placeholder="Email Address" v-model="email" class="input-material" :class="{ 'is-invalid': submitted && !validateEmail(email) }">
               </div>
               <div class="form-group-material">
                 <input id="register-password" type="password" name="registerPassword" placeholder="Password" v-model="password" class="input-material" :class="{ 'is-invalid': submitted && !validatePassword() }">
@@ -49,7 +46,7 @@ export default {
             username: '',
             password: '',
             confirmPassword: '',
-            name: '', 
+            fullname: '', 
             agree: false,
             submitted: false
         }
@@ -69,12 +66,12 @@ export default {
     methods: {
         handleSubmit (e) {
             this.submitted = true;
-            const { username, password, confirmPassword, name, email, agree } = this;
+            const { username, password, confirmPassword, fullname, agree } = this;
             const { dispatch } = this.$store;
             const validPassword = confirmPassword && confirmPassword === password;
-            if (this.validateUsername(username) && this.validatePassword() && this.validateName(name) && agree && this.validateEmail(email)) {
+            if (this.validateUsername(username) && this.validatePassword() && this.validateName(fullname) && agree) {
               this.submitted = false;
-              dispatch('authentication/register', { username, password, name });
+              dispatch('authentication/register', { username, password, fullname });
             }
         },
         validateEmail(email) {

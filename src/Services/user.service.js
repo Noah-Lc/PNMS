@@ -10,13 +10,13 @@ function register(username, password, fullname) {
     const data = {
         'username': username,
         'password': password,
-        'fullname': fullname,
+        'fullname': fullname
     };
     
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: data
+        body: JSON.stringify(data)
     };
 
     return fetch(`${config.apiUrl}/api/user`, requestOptions)
